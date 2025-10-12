@@ -317,7 +317,6 @@ endfun
 fun! s:Funcs.msg(text) abort
     if s:v.eco | return | endif
 
-    echo "\r"
     redraw
     if type(a:text) == type("")
         echohl WarningMsg

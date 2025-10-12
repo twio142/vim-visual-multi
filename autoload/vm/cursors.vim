@@ -235,17 +235,6 @@ fun! s:change_at_cursors(M, reg, n) abort
     let s:v.changed_text =  s:V.Edit.delete(1, reg, 1, 0)
     call s:V.Insert.key('i')
 
-  elseif Obj=='l'
-    call s:G.extend_mode()
-    if N > 1
-      call vm#commands#motion('l', N-1, 0, 0)
-    endif
-    call feedkeys('"'.reg."c")
-
-  elseif s:forward(Obj) || s:ia(Obj) && !s:inside(Obj)
-    call vm#operators#select(1, N.Obj)
-    call feedkeys('"'.reg."c")
-
   else
     call s:V.Edit.run_normal('d'.Obj, {'count': N, 'store': reg, 'recursive': s:recursive})
     call s:G.merge_regions()
