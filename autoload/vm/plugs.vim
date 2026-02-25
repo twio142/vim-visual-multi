@@ -165,9 +165,9 @@ fun! vm#plugs#buffer() abort
   nnoremap <silent>        <Plug>(VM-gDecrease)               :<C-u>call vm#commands#increase_or_decrease(0, 0, v:count1, v:true)<cr>
   nnoremap <silent>        <Plug>(VM-Alpha-Increase)          :<C-u>call vm#commands#increase_or_decrease(1, 1, v:count1, v:false)<cr>
   nnoremap <silent>        <Plug>(VM-Alpha-Decrease)          :<C-u>call vm#commands#increase_or_decrease(0, 1, v:count1, v:false)<cr>
-  nnoremap <silent>        <Plug>(VM-a)                       :<C-u>call b:VM_Selection.Insert.key('a')<cr>
+  nnoremap <silent>        <Plug>(VM-a)                       :<C-u>if g:Vm.extend_mode \| call vm#operators#select(v:count, 'a') \| else \| call b:VM_Selection.Insert.key('a') \| endif<cr>
   nnoremap <silent>        <Plug>(VM-A)                       :<C-u>call b:VM_Selection.Insert.key('A')<cr>
-  nnoremap <silent>        <Plug>(VM-i)                       :<C-u>call b:VM_Selection.Insert.key('i')<cr>
+  nnoremap <silent>        <Plug>(VM-i)                       :<C-u>if g:Vm.extend_mode \| call vm#operators#select(v:count, 'i') \| else \| call b:VM_Selection.Insert.key('i') \| endif<cr>
   nnoremap <silent>        <Plug>(VM-I)                       :<C-u>call b:VM_Selection.Insert.key('I')<cr>
   nnoremap <silent>        <Plug>(VM-o)                       :<C-u>call <sid>O(0)<cr>
   nnoremap <silent>        <Plug>(VM-O)                       :<C-u>call <sid>O(1)<cr>

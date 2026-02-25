@@ -30,11 +30,15 @@ fun! vm#operators#select(count, ...) abort
     let pos = getpos('.')[1:2]
     call s:F.Scroll.get(1)
 
-    if a:0 | return s:select(a:1) | endif
+    if a:0
+        if !(len(a:1) == 1 && s:double(a:1))
+            return s:select(a:1)
+        endif
+    endif
 
-    let [ abort, s, n ] = [ 0, '', '' ]
+    let [ abort, s, n ] = [ 0, a:0 ? a:1 : '', '' ]
     let x = a:count>1? a:count : 1
-    echo "Selecting: ".(x>1? x : '')
+    echo "Selecting: ".(x>1? x : '').(a:0 ? a:1 : '')
 
     while 1
         let c = getchar()
