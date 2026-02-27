@@ -10,22 +10,19 @@ fun! vm#cursors#operation(op, n, register, ...) abort
   "shortcut for command in a:1
   if a:0 | call s:process(oper, a:1, reg, 0) | return | endif
 
-  call s:F.msg('[VM] ')
-
   "starting string
   let M = (a:n>1? a:n : '') . (reg == s:v.def_reg? '' : '"'.reg) . oper
 
   "preceding count
   let n = a:n>1? a:n : 1
 
-  echon M
   while 1
     let c = nr2char(getchar())
     let is_user_op = index(keys(g:Vm.user_ops), M . c) >= 0
 
     if is_user_op
       " let the entered characters be our operator
-      echon c | let M .= c | let oper = M
+      let M .= c | let oper = M
       if !g:Vm.user_ops[M]
         " accepts a regular text object
         continue
@@ -34,49 +31,49 @@ fun! vm#cursors#operation(op, n, register, ...) abort
         let chars2read = g:Vm.user_ops[M]
         while chars2read
           let c = nr2char(getchar())
-          echon c | let M .= c
+          let M .= c
           let chars2read -= 1
         endwhile
         break
       endif
 
-    elseif s:double(c)              | echon c | let M .= c
-      let c = nr2char(getchar())    | echon c | let M .= c | break
+    elseif s:double(c)              | let M .= c
+      let c = nr2char(getchar())    | let M .= c | break
 
-    elseif oper ==# 'c' && c==?'r'  | echon c | let M .= c
-      let c = nr2char(getchar())    | echon c | let M .= c | break
+    elseif oper ==# 'c' && c==?'r'  | let M .= c
+      let c = nr2char(getchar())    | let M .= c | break
 
-    elseif oper ==# 'c' && c==?'s'  | echon c | let M .= c
-      let c = nr2char(getchar())    | echon c | let M .= c
-      let c = nr2char(getchar())    | echon c | let M .= c | break
+    elseif oper ==# 'c' && c==?'s'  | let M .= c
+      let c = nr2char(getchar())    | let M .= c
+      let c = nr2char(getchar())    | let M .= c | break
 
-    elseif oper ==# 'y' && c==?'s'  | echon c | let M .= c
-      let c = nr2char(getchar())    | echon c | let M .= c
+    elseif oper ==# 'y' && c==?'s'  | let M .= c
+      let c = nr2char(getchar())    | let M .= c
       if s:double(c)
-        let c = nr2char(getchar())  | echon c | let M .= c
+        let c = nr2char(getchar())  | let M .= c
       endif
-      let c = nr2char(getchar())    | echon c
+      let c = nr2char(getchar())
       if c == '<' || c == 't'
         redraw
         let tag = s:V.Edit.surround_tags()
         if tag == ''
           echon ' ...Aborted'       | return
         else
-          let M .= tag              | echon c | break
+          let M .= tag              | break
         endif
       else
-        let M .= c                  | echon c | break
+        let M .= c                  | break
       endif
 
-    elseif oper ==# 'd' && c==#'s'  | echon c | let M .= c
-      let c = nr2char(getchar())    | echon c | let M .= c | break
+    elseif oper ==# 'd' && c==#'s'  | let M .= c
+      let c = nr2char(getchar())    | let M .= c | break
 
-    elseif s:single(c)              | echon c | let M .= c | break
+    elseif s:single(c)              | let M .= c | break
 
-    elseif str2nr(c) > 0            | echon c | let M .= c
+    elseif str2nr(c) > 0            | let M .= c
 
     " if the entered char is the last character of the operator (eg 'yy', 'gUU')
-    elseif oper[-1:-1] ==# c        | echon c | let M .= '_' | break
+    elseif oper[-1:-1] ==# c        | let M .= '_' | break
 
     else | echon ' ...Aborted'      | return
     endif

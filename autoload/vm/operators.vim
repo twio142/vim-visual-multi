@@ -47,13 +47,13 @@ fun! vm#operators#select(count, ...) abort
         else       | let c = nr2char(c) | endif
 
         if str2nr(c) > 0
-            let n .= c    | echon c
+            let n .= c
 
         elseif s:single(c)
-            let s .= c    | echon c | break
+            let s .= c    | break
 
         elseif s:double(c) || len(s)
-            let s .= c    | echon c
+            let s .= c
             if len(s) > 1 | break   | endif
 
         else
