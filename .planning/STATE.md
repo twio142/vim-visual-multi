@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-02-28T15:00:00.000Z"
+last_updated: "2026-02-28T19:11:36Z"
 progress:
   total_phases: 8
   completed_phases: 2
-  total_plans: 6
-  completed_plans: 6
+  total_plans: 7
+  completed_plans: 7
 ---
 
 # Project State
@@ -23,11 +23,11 @@ See: .planning/PROJECT.md (updated 2026-02-28)
 ## Current Position
 
 Phase: 3 of 8 (Region and Highlight)
-Plan: 1 of 1 in current phase (complete)
-Status: Phase 3 plan 1 complete
-Last activity: 2026-02-28 — Completed 03-01 (VM_ highlight groups, Region sel_mark_id/anchor_mark_id/tip_mark_id/mode, session primary_idx, 63 tests pass)
+Plan: 2 of 2 in current phase (complete)
+Status: Phase 3 plan 2 complete
+Last activity: 2026-02-28 — Completed 03-02 (highlight.redraw engine, _col_end, toggle_mode anchor wiring, 73 tests pass)
 
-Progress: [██████░░░░] 20%
+Progress: [██████░░░░] 25%
 
 ## Performance Metrics
 
@@ -42,10 +42,10 @@ Progress: [██████░░░░] 20%
 |-------|-------|-------|----------|
 | 01-foundation | 4 | 10 min | 2.5 min |
 | 02-session-lifecycle | 1 | 2 min | 2 min |
-| 03-region-and-highlight | 1 | 3 min | 3 min |
+| 03-region-and-highlight | 2 | 11 min | 5.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-03 (2 min), 01-04 (2 min), 02-01 (2 min), 03-01 (3 min)
+- Last 5 plans: 01-04 (2 min), 02-01 (2 min), 03-01 (3 min), 03-02 (8 min)
 - Trend: stable
 
 *Updated after each plan completion*
@@ -53,6 +53,7 @@ Progress: [██████░░░░] 20%
 | Phase 01-foundation P04 | 2 | 2 tasks | 2 files |
 | Phase 02-session-lifecycle P01 | 2 | 2 tasks | 2 files |
 | Phase 03-region-and-highlight P01 | 3 | 2 tasks | 4 files |
+| Phase 03-region-and-highlight P02 | 8 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -88,6 +89,11 @@ Recent decisions affecting current work:
 - [03-01]: anchor_mark_id only created when mode='extend' AND anchor table provided — no unnecessary extmarks in cursor mode
 - [03-01]: tip_mark_id=nil reserved for redraw engine — not created by Region.new, set externally by Phase 3 Wave 2
 - [03-01]: primary_idx=0 sentinel means no cursors added yet (0 not -1 to avoid off-by-one with 1-indexed Lua arrays)
+- [03-02]: Read-then-clear-then-draw order in redraw() — positions must be cached before nvim_buf_clear_namespace to avoid reading stale deleted marks
+- [03-02]: No id= in redraw draw helpers — after clear_namespace old IDs are invalid; create new marks, store returned IDs back
+- [03-02]: Dual-extmark for extend mode — sel_mark_id = selection span (priority 200), tip_mark_id = cursor-tip overlay (priority 201)
+- [03-02]: anchor recreated each redraw with right_gravity=false to preserve position tracking after buffer edits
+- [03-02]: toggle_mode() now calls hl.redraw(session); set_mode/set_cursor_mode/set_extend_mode do NOT call redraw (Phase 4+ callers manage)
 
 ### Pending Todos
 
@@ -102,5 +108,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-28
-Stopped at: Completed 03-01-PLAN.md (VM_ highlight groups, Region sel_mark_id/anchor_mark_id/mode, session primary_idx, 63 mini.test specs pass — Phase 3 plan 1 complete)
+Stopped at: Completed 03-02-PLAN.md (highlight.redraw engine, _col_end, _draw_cursor_region, _draw_extend_region, toggle_mode anchor wiring, 73 mini.test specs pass — Phase 3 plan 2 complete)
 Resume file: None

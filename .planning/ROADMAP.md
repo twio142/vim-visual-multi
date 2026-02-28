@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - Tier 0-1 module scaffolding: config, util, highlight, region, undo with pitfall guards baked in (completed 2026-02-28)
 - [x] **Phase 2: Session Lifecycle** - Session start/stop, option save/restore, keymap management, reentrancy guard (completed 2026-02-28)
-- [ ] **Phase 3: Region and Highlight** - Extmark-based region tracking, cursor/extend-mode rendering, eco-mode batch updates
+- [x] **Phase 3: Region and Highlight** - Extmark-based region tracking, cursor/extend-mode rendering, eco-mode batch updates (completed 2026-02-28)
 - [ ] **Phase 4: Normal-Mode Operations** - d/c/y/p/case/numbers at all cursors with correct undo grouping
 - [ ] **Phase 5: Insert Mode** - Simultaneous keystroke replication, InsertLeave sync, per-cursor registers
 - [ ] **Phase 6: Search, Entry Points, and Advanced Commands** - C-n, select-all, skip/remove/filter regions, align, transpose, run-normal/macro
@@ -140,7 +140,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete   | 2026-02-28 |
 | 2. Session Lifecycle | 1/1 | Complete | 2026-02-28 |
-| 3. Region and Highlight | 1/2 | In Progress|  |
+| 3. Region and Highlight | 2/2 | Complete   | 2026-02-28 |
 | 4. Normal-Mode Operations | 0/TBD | Not started | - |
 | 5. Insert Mode | 0/TBD | Not started | - |
 | 6. Search, Entry Points, and Advanced Commands | 0/TBD | Not started | - |
