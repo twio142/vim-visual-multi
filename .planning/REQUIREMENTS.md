@@ -66,46 +66,44 @@
 
 ## Traceability
 
-*Populated during roadmap creation.*
-
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| LUA-01 | — | Pending |
-| LUA-02 | — | Pending |
-| LUA-03 | — | Pending |
-| CFG-01 | — | Pending |
-| CFG-02 | — | Pending |
-| CFG-03 | — | Pending |
-| CFG-04 | — | Pending |
-| CFG-05 | — | Pending |
-| CFG-06 | — | Pending |
-| CFG-07 | — | Pending |
-| CFG-08 | — | Pending |
-| CFG-09 | — | Pending |
-| CFG-10 | — | Pending |
-| FEAT-01 | — | Pending |
-| FEAT-02 | — | Pending |
-| FEAT-03 | — | Pending |
-| FEAT-04 | — | Pending |
-| FEAT-05 | — | Pending |
-| FEAT-06 | — | Pending |
-| FEAT-07 | — | Pending |
-| FEAT-08 | — | Pending |
-| FEAT-09 | — | Pending |
-| FEAT-10 | — | Pending |
-| FEAT-11 | — | Pending |
-| FEAT-12 | — | Pending |
-| FEAT-13 | — | Pending |
-| FEAT-14 | — | Pending |
-| FEAT-15 | — | Pending |
-| TEST-01 | — | Pending |
-| TEST-02 | — | Pending |
+| LUA-01 | Phase 1 | Pending |
+| LUA-02 | Phase 1 | Pending |
+| LUA-03 | Phase 1 | Pending |
+| CFG-01 | Phase 2 | Pending |
+| CFG-02 | Phase 7 | Pending |
+| CFG-03 | Phase 7 | Pending |
+| CFG-04 | Phase 7 | Pending |
+| CFG-05 | Phase 7 | Pending |
+| CFG-06 | Phase 7 | Pending |
+| CFG-07 | Phase 7 | Pending |
+| CFG-08 | Phase 7 | Pending |
+| CFG-09 | Phase 7 | Pending |
+| CFG-10 | Phase 7 | Pending |
+| FEAT-01 | Phase 6 | Pending |
+| FEAT-02 | Phase 6 | Pending |
+| FEAT-03 | Phase 2 | Pending |
+| FEAT-04 | Phase 5 | Pending |
+| FEAT-05 | Phase 4 | Pending |
+| FEAT-06 | Phase 4 | Pending |
+| FEAT-07 | Phase 3 | Pending |
+| FEAT-08 | Phase 6 | Pending |
+| FEAT-09 | Phase 6 | Pending |
+| FEAT-10 | Phase 4 | Pending |
+| FEAT-11 | Phase 6 | Pending |
+| FEAT-12 | Phase 5 | Pending |
+| FEAT-13 | Phase 7 | Pending |
+| FEAT-14 | Phase 7 | Pending |
+| FEAT-15 | Phase 6 | Pending |
+| TEST-01 | Phase 8 | Pending |
+| TEST-02 | Phase 8 | Pending |
 
 **Coverage:**
 - v1 requirements: 30 total
-- Mapped to phases: 0
-- Unmapped: 30 ⚠️
+- Mapped to phases: 30
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-28*
-*Last updated: 2026-02-28 after initial definition*
+*Last updated: 2026-02-28 after roadmap creation*
