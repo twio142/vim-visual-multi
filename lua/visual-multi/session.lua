@@ -23,6 +23,9 @@ local function _new_session(buf, initial_mode)
 
     -- Cursor list (populated by Phase 3+)
     cursors = {},
+    -- Index of the primary (most-recently-added) cursor in cursors list.
+    -- 0 = no cursors; set to #session.cursors when cursor added (Phase 4+).
+    primary_idx = 0,
 
     -- Saved state for restoration
     _saved = {

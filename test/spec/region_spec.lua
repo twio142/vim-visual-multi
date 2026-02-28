@@ -17,13 +17,13 @@ local T = MiniTest.new_set({
   },
 })
 
--- 1. Region.new returns a table with integer mark_id and _stopped == false
-T['Region.new returns table with mark_id and _stopped=false'] = function()
+-- 1. Region.new returns a table with integer sel_mark_id and _stopped == false
+T['Region.new returns table with sel_mark_id and _stopped=false'] = function()
   local Region = require('visual-multi.region')
   local r = Region.new(buf, 0, 0)
   MiniTest.expect.equality(type(r), 'table')
-  MiniTest.expect.equality(type(r.mark_id), 'number')
-  assert(r.mark_id > 0, 'Expected mark_id > 0, got ' .. tostring(r.mark_id))
+  MiniTest.expect.equality(type(r.sel_mark_id), 'number')
+  assert(r.sel_mark_id > 0, 'Expected sel_mark_id > 0, got ' .. tostring(r.sel_mark_id))
   MiniTest.expect.equality(r._stopped, false)
 end
 
@@ -36,17 +36,17 @@ T['Region:pos returns correct initial position'] = function()
   MiniTest.expect.equality(col, 2)
 end
 
--- 3. After region:move(0, 5), pos() returns (0, 5) with same mark_id
-T['Region:move updates position in place (same mark_id)'] = function()
+-- 3. After region:move(0, 5), pos() returns (0, 5) with same sel_mark_id
+T['Region:move updates position in place (same sel_mark_id)'] = function()
   local Region = require('visual-multi.region')
   local r = Region.new(buf, 0, 0)
-  local original_id = r.mark_id
+  local original_id = r.sel_mark_id
   r:move(0, 5)
   local row, col = r:pos()
   MiniTest.expect.equality(row, 0)
   MiniTest.expect.equality(col, 5)
-  -- mark_id must be unchanged (in-place update, not delete-and-recreate)
-  MiniTest.expect.equality(r.mark_id, original_id)
+  -- sel_mark_id must be unchanged (in-place update, not delete-and-recreate)
+  MiniTest.expect.equality(r.sel_mark_id, original_id)
 end
 
 -- 4. After region:remove(), region._stopped == true
@@ -62,7 +62,7 @@ T['Region:remove deletes the extmark from buffer'] = function()
   local Region = require('visual-multi.region')
   local hl = require('visual-multi.highlight')
   local r = Region.new(buf, 0, 0)
-  local id = r.mark_id
+  local id = r.sel_mark_id
   r:remove()
   local info = vim.api.nvim_buf_get_extmark_by_id(buf, hl.ns, id, {})
   MiniTest.expect.equality(info, {})
