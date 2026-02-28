@@ -33,7 +33,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. `_is_session()` dispatch convention is in place — no duplicate function definitions exist in any module
   4. `nvim_buf_get_offset` is the sole byte-offset API — no Python dependency, no `line2byte()` calls
   5. Test buffers use `nvim_create_buf(false, false)` — undo tests actually exercise undo (BUG-02 prevented)
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Branch setup, mini.test vendor, plugin shim rewrite, init.lua skeleton, test runner
+- [ ] 01-02-PLAN.md — config.lua and util.lua (Tier-0 modules) with specs
+- [ ] 01-03-PLAN.md — highlight.lua and region.lua (Tier-1 rendering modules) with specs
+- [ ] 01-04-PLAN.md — undo.lua (Tier-1 undo grouping) with BUG-02/03/04 regression spec
 
 ### Phase 2: Session Lifecycle
 **Goal**: A multi-cursor session can be started and cleanly stopped, with all options, keymaps, and autocmds correctly saved and restored — no state leaks between sessions
@@ -125,7 +131,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/TBD | Not started | - |
+| 1. Foundation | 0/4 | Not started | - |
 | 2. Session Lifecycle | 0/TBD | Not started | - |
 | 3. Region and Highlight | 0/TBD | Not started | - |
 | 4. Normal-Mode Operations | 0/TBD | Not started | - |
