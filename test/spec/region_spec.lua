@@ -78,4 +78,40 @@ T['util.is_session(region) returns true'] = function()
   MiniTest.expect.equality(util.is_session(r), true)
 end
 
+-- ─── Phase 3 extend-mode specs ──────────────────────────────────────────────
+
+-- 7. Region.new in extend mode has anchor_mark_id and mode='extend'
+T['Region.new in extend mode has anchor_mark_id and mode=extend'] = function()
+  local Region = require('visual-multi.region')
+  local r = Region.new(buf, 0, 5, 'extend', {0, 0})
+  MiniTest.expect.equality(r.mode, 'extend')
+  MiniTest.expect.equality(type(r.anchor_mark_id), 'number')
+  assert(r.anchor_mark_id > 0,
+    'Expected anchor_mark_id > 0, got ' .. tostring(r.anchor_mark_id))
+end
+
+-- 8. Region.new in cursor mode has anchor_mark_id=nil and mode='cursor'
+T['Region.new in cursor mode has anchor_mark_id=nil and mode=cursor'] = function()
+  local Region = require('visual-multi.region')
+  local r = Region.new(buf, 0, 0)
+  MiniTest.expect.equality(r.mode, 'cursor')
+  MiniTest.expect.equality(r.anchor_mark_id, nil)
+end
+
+-- 9. Region:remove() in extend mode cleans up anchor_mark_id extmark
+T['Region:remove in extend mode cleans up anchor_mark_id extmark'] = function()
+  local Region = require('visual-multi.region')
+  local hl     = require('visual-multi.highlight')
+  local r = Region.new(buf, 0, 5, 'extend', {0, 0})
+  local saved_sel_id  = r.sel_mark_id
+  local saved_anc_id  = r.anchor_mark_id
+  r:remove()
+  MiniTest.expect.equality(r._stopped, true)
+  -- Both extmarks must be gone from the buffer
+  local sel_info = vim.api.nvim_buf_get_extmark_by_id(buf, hl.ns, saved_sel_id,  {})
+  local anc_info = vim.api.nvim_buf_get_extmark_by_id(buf, hl.ns, saved_anc_id,  {})
+  MiniTest.expect.equality(sel_info, {})
+  MiniTest.expect.equality(anc_info, {})
+end
+
 return T

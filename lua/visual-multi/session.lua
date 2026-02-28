@@ -223,14 +223,47 @@ function M.stop(buf, opts)
   })
 end
 
---- Flip extend_mode boolean.
---- Phase 2: mode flip only. Cursor shape/selection collapse deferred to Phase 3.
+--- Toggle extend_mode with anchor setup/collapse and redraw.
+--- Cursor → Extend: pins anchor extmark at current cursor-tip position for each region.
+--- Extend → Cursor: removes anchor extmarks, clears tip_mark_id reference, sets mode='cursor'.
+--- Always calls hl.redraw(session) after mode transition.
 ---@param session table
 function M.toggle_mode(session)
-  session.extend_mode = not session.extend_mode
+  local hl = require('visual-multi.highlight')
+  if session.extend_mode then
+    -- Extend → Cursor: collapse each selection to its cursor-tip position
+    for _, r in ipairs(session.cursors) do
+      if not r._stopped then
+        -- Delete anchor tracking mark (will be absent after next clear-all redraw)
+        if r.anchor_mark_id then
+          pcall(vim.api.nvim_buf_del_extmark, r.buf, hl.ns, r.anchor_mark_id)
+          r.anchor_mark_id = nil
+        end
+        r.tip_mark_id = nil   -- will be gone after next clear-all redraw
+        r.mode = 'cursor'
+      end
+    end
+    session.extend_mode = false
+  else
+    -- Cursor → Extend: pin anchor at current cursor-tip position
+    for _, r in ipairs(session.cursors) do
+      if not r._stopped then
+        local info = vim.api.nvim_buf_get_extmark_by_id(r.buf, hl.ns, r.sel_mark_id, {})
+        local anc_row, anc_col = info[1], info[2]
+        -- Create anchor tracking extmark (right_gravity=false: stays left on insert-before)
+        r.anchor_mark_id = vim.api.nvim_buf_set_extmark(r.buf, hl.ns, anc_row, anc_col, {
+          right_gravity = false,
+          strict        = false,
+        })
+        r.mode = 'extend'
+      end
+    end
+    session.extend_mode = true
+  end
+  hl.redraw(session)
 end
 
---- Set extend_mode unconditionally.
+--- Set extend_mode unconditionally (does NOT call redraw — callers at Phase 4+ manage redraw).
 ---@param session table
 ---@param extend boolean
 function M.set_mode(session, extend)
@@ -238,12 +271,14 @@ function M.set_mode(session, extend)
 end
 
 --- Ensure cursor mode (extend_mode = false). Idempotent.
+--- Note: delegates to toggle_mode which calls redraw; use only when cursors are present.
 ---@param session table
 function M.set_cursor_mode(session)
   if session.extend_mode then M.toggle_mode(session) end
 end
 
 --- Ensure extend mode (extend_mode = true). Idempotent.
+--- Note: delegates to toggle_mode which calls redraw; use only when cursors are present.
 ---@param session table
 function M.set_extend_mode(session)
   if not session.extend_mode then M.toggle_mode(session) end
