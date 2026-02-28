@@ -13,7 +13,7 @@ This roadmap ports the VimScript/Python multi-cursor plugin to pure Lua, targeti
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - Tier 0-1 module scaffolding: config, util, highlight, region, undo with pitfall guards baked in (completed 2026-02-28)
-- [ ] **Phase 2: Session Lifecycle** - Session start/stop, option save/restore, keymap management, reentrancy guard
+- [x] **Phase 2: Session Lifecycle** - Session start/stop, option save/restore, keymap management, reentrancy guard (completed 2026-02-28)
 - [ ] **Phase 3: Region and Highlight** - Extmark-based region tracking, cursor/extend-mode rendering, eco-mode batch updates
 - [ ] **Phase 4: Normal-Mode Operations** - d/c/y/p/case/numbers at all cursors with correct undo grouping
 - [ ] **Phase 5: Insert Mode** - Simultaneous keystroke replication, InsertLeave sync, per-cursor registers
@@ -54,7 +54,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 02-01-PLAN.md — session.lua (Tier-2 lifecycle module) with start/stop/toggle_mode and session_spec.lua
+- [x] 02-01-PLAN.md — session.lua (Tier-2 lifecycle module) with start/stop/toggle_mode and session_spec.lua
 
 ### Phase 3: Region and Highlight
 **Goal**: Regions (cursor and extend-mode selections) are tracked with extmarks and rendered correctly, with atomic teardown on session exit and no ghost highlights

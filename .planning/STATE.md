@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: unknown
-last_updated: "2026-02-28T03:54:09.054Z"
+status: in_progress
+last_updated: "2026-02-28T14:13:01Z"
 progress:
-  total_phases: 1
+  total_phases: 8
   completed_phases: 1
-  total_plans: 4
-  completed_plans: 4
+  total_plans: 5
+  completed_plans: 5
 ---
 
 # Project State
@@ -18,16 +18,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-28)
 
 **Core value:** All existing multi-cursor behaviors work identically after the rewrite — users lose no functionality, and configuration becomes ergonomic via setup()
-**Current focus:** Phase 1 — Foundation
+**Current focus:** Phase 2 — Session Lifecycle
 
 ## Current Position
 
-Phase: 1 of 8 (Foundation)
-Plan: 4 of 4 in current phase
-Status: Phase complete
-Last activity: 2026-02-28 — Completed 01-04 (undo.lua, undo_spec.lua, 39 tests pass, Phase 1 done)
+Phase: 2 of 8 (Session Lifecycle)
+Plan: 1 of 1 in current phase (complete)
+Status: Phase 2 plan 1 complete
+Last activity: 2026-02-28 — Completed 02-01 (session.lua, session_spec.lua, 63 tests pass)
 
-Progress: [████░░░░░░] 12%
+Progress: [█████░░░░░] 15%
 
 ## Performance Metrics
 
@@ -41,14 +41,16 @@ Progress: [████░░░░░░] 12%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-foundation | 4 | 10 min | 2.5 min |
+| 02-session-lifecycle | 1 | 2 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (3 min), 01-02 (3 min), 01-03 (2 min), 01-04 (2 min)
+- Last 5 plans: 01-01 (3 min), 01-02 (3 min), 01-03 (2 min), 01-04 (2 min), 02-01 (2 min)
 - Trend: stable
 
 *Updated after each plan completion*
 | Phase 01-foundation P03 | 2 | 2 tasks | 4 files |
 | Phase 01-foundation P04 | 2 | 2 tasks | 2 files |
+| Phase 02-session-lifecycle P01 | 2 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -74,6 +76,10 @@ Recent decisions affecting current work:
 - [01-04]: flush_undo_history uses undojoin not nvim_buf_set_lines no-op — avoids modifying buffer content
 - [01-04]: undojoin wrapped in pcall to guard against invalid-context errors (e.g., after redo)
 - [01-04]: spec hooks fixed from plan's T['before_each'] to correct MiniTest.new_set({ hooks: { pre_case, post_case } }) API
+- [02-01]: guicursor modification deferred to Phase 3 — VimScript source uses matchadd not guicursor; save/restore infra present but modification skipped
+- [02-01]: nvim_buf_call wraps maparg call for buffer-local keymap lookup — ensures correct buffer context in headless tests
+- [02-01]: sessions[buf] = nil set first in stop() to prevent double-stop race with BufDelete + manual Esc
+- [02-01]: Phase 2 scope installs only v keymap; full keymap table deferred to Phase 6
 
 ### Pending Todos
 
@@ -88,5 +94,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-28
-Stopped at: Completed 01-04-PLAN.md (undo.lua, undo_spec.lua, 39 mini.test specs pass — Phase 1 complete)
+Stopped at: Completed 02-01-PLAN.md (session.lua, session_spec.lua, 63 mini.test specs pass — Phase 2 plan 1 complete)
 Resume file: None

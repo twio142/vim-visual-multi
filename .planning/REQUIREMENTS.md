@@ -13,7 +13,7 @@
 
 ### Configuration API
 
-- [ ] **CFG-01**: setup(opts) is the sole config entry point (no g:VM_xxx support)
+- [x] **CFG-01**: setup(opts) is the sole config entry point (no g:VM_xxx support)
 - [ ] **CFG-02**: Appearance opts — highlight_matches, theme
 - [ ] **CFG-03**: Statusline opts — statusline.enabled, statusline.refresh_mode, statusline.silent_exit
 - [ ] **CFG-04**: UI opts — show_warnings, verbose_commands, cmdheight
@@ -28,7 +28,7 @@
 
 - [ ] **FEAT-01**: Add cursor at word under cursor, at arbitrary position, up/down by line
 - [ ] **FEAT-02**: Pattern-based multi-select: VM-/ regex, find-under (C-n), select-all, visual entry points
-- [ ] **FEAT-03**: Cursor mode and extend mode with switching between them (v key)
+- [x] **FEAT-03**: Cursor mode and extend mode with switching between them (v key)
 - [ ] **FEAT-04**: Simultaneous insert mode — i/a/I/A/o/O replicated across all cursors
 - [ ] **FEAT-05**: Simultaneous normal mode commands — d, c, y, p, D, C, x, J, and all standard ops
 - [ ] **FEAT-06**: Undo grouping — all-cursor edits within a session undo as a single operation
@@ -71,7 +71,7 @@
 | LUA-01 | Phase 1 | Complete |
 | LUA-02 | Phase 1 | Complete |
 | LUA-03 | Phase 1 | Complete |
-| CFG-01 | Phase 2 | Pending |
+| CFG-01 | Phase 2 | Complete |
 | CFG-02 | Phase 7 | Pending |
 | CFG-03 | Phase 7 | Pending |
 | CFG-04 | Phase 7 | Pending |
@@ -83,7 +83,7 @@
 | CFG-10 | Phase 7 | Pending |
 | FEAT-01 | Phase 6 | Pending |
 | FEAT-02 | Phase 6 | Pending |
-| FEAT-03 | Phase 2 | Pending |
+| FEAT-03 | Phase 2 | Complete |
 | FEAT-04 | Phase 5 | Pending |
 | FEAT-05 | Phase 4 | Pending |
 | FEAT-06 | Phase 4 | Pending |
