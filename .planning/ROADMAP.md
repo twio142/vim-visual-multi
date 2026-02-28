@@ -51,7 +51,10 @@ Plans:
   3. Pre-existing user keymaps on buffer-local bindings are preserved after session exit (PITFALL-09 prevented)
   4. Starting a session while one is already active in the same buffer does not double-initialize (PITFALL-11 prevented)
   5. Cursor mode and extend mode toggle correctly via `v`; mode is reflected in session state
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 02-01-PLAN.md — session.lua (Tier-2 lifecycle module) with start/stop/toggle_mode and session_spec.lua
 
 ### Phase 3: Region and Highlight
 **Goal**: Regions (cursor and extend-mode selections) are tracked with extmarks and rendered correctly, with atomic teardown on session exit and no ghost highlights
@@ -132,7 +135,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete   | 2026-02-28 |
-| 2. Session Lifecycle | 0/TBD | Not started | - |
+| 2. Session Lifecycle | 0/1 | Not started | - |
 | 3. Region and Highlight | 0/TBD | Not started | - |
 | 4. Normal-Mode Operations | 0/TBD | Not started | - |
 | 5. Insert Mode | 0/TBD | Not started | - |
