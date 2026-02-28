@@ -12,7 +12,7 @@ This roadmap ports the VimScript/Python multi-cursor plugin to pure Lua, targeti
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - Tier 0-1 module scaffolding: config, util, highlight, region, undo with pitfall guards baked in
+- [x] **Phase 1: Foundation** - Tier 0-1 module scaffolding: config, util, highlight, region, undo with pitfall guards baked in (completed 2026-02-28)
 - [ ] **Phase 2: Session Lifecycle** - Session start/stop, option save/restore, keymap management, reentrancy guard
 - [ ] **Phase 3: Region and Highlight** - Extmark-based region tracking, cursor/extend-mode rendering, eco-mode batch updates
 - [ ] **Phase 4: Normal-Mode Operations** - d/c/y/p/case/numbers at all cursors with correct undo grouping
@@ -38,7 +38,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 Plans:
 - [ ] 01-01-PLAN.md — Branch setup, mini.test vendor, plugin shim rewrite, init.lua skeleton, test runner
 - [ ] 01-02-PLAN.md — config.lua and util.lua (Tier-0 modules) with specs
-- [ ] 01-03-PLAN.md — highlight.lua and region.lua (Tier-1 rendering modules) with specs
+- [x] 01-03-PLAN.md — highlight.lua and region.lua (Tier-1 rendering modules) with specs
 - [ ] 01-04-PLAN.md — undo.lua (Tier-1 undo grouping) with BUG-02/03/04 regression spec
 
 ### Phase 2: Session Lifecycle
@@ -131,7 +131,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 2/4 | In Progress|  |
+| 1. Foundation | 4/4 | Complete   | 2026-02-28 |
 | 2. Session Lifecycle | 0/TBD | Not started | - |
 | 3. Region and Highlight | 0/TBD | Not started | - |
 | 4. Normal-Mode Operations | 0/TBD | Not started | - |
