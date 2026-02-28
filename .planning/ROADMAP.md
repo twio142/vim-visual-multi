@@ -66,7 +66,11 @@ Plans:
   3. Ending a session clears all extmarks atomically via `nvim_buf_clear_namespace` — no ghost highlights persist
   4. Extend-mode regions display as visual selections; cursor-mode regions display as single-character highlights
   5. Eco-mode batch updates complete without intermediate flicker during multi-cursor loops
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Data model migration: VM_ highlight groups, sel_mark_id/anchor_mark_id/tip_mark_id, primary_idx in session, spec updates
+- [ ] 03-02-PLAN.md — Redraw engine: highlight.redraw(session), _col_end, extend-mode dual-extmark, toggle_mode wiring, new specs
 
 ### Phase 4: Normal-Mode Operations
 **Goal**: Standard normal-mode commands (d, c, y, p, case conversion, number increment/decrement, dot-repeat) execute simultaneously at all cursors and undo as a single operation
@@ -135,8 +139,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete   | 2026-02-28 |
-| 2. Session Lifecycle | 0/1 | Not started | - |
-| 3. Region and Highlight | 0/TBD | Not started | - |
+| 2. Session Lifecycle | 1/1 | Complete | 2026-02-28 |
+| 3. Region and Highlight | 0/2 | Not started | - |
 | 4. Normal-Mode Operations | 0/TBD | Not started | - |
 | 5. Insert Mode | 0/TBD | Not started | - |
 | 6. Search, Entry Points, and Advanced Commands | 0/TBD | Not started | - |
