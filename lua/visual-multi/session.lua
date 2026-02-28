@@ -43,10 +43,11 @@ local function _new_session(buf, initial_mode)
   }
 end
 
---- Save virtualedit, conceallevel, and guicursor; set session values.
+--- Save virtualedit, conceallevel, guicursor, and Phase 4 options; set session values.
 --- CRITICAL: conceallevel is window-local — use nvim_win_get_option/set_option (BUG-01).
 ---@param session table
 local function _save_and_set_options(session)
+  local buf   = session.buf
   local win   = session.win
   local saved = session._saved.opts
 
@@ -62,12 +63,31 @@ local function _save_and_set_options(session)
   -- (RESEARCH.md open question 1: VimScript source uses matchadd/highlight, not guicursor)
   saved.guicursor = vim.o.guicursor
   -- Do NOT modify guicursor in Phase 2.
+
+  -- synmaxcol: buffer-local — prevents syntax highlighting from choking on long lines
+  -- during batch multi-cursor edits (Phase 4 scope — deferred from Phase 2 RESEARCH.md).
+  saved.synmaxcol = vim.bo[buf].synmaxcol
+  vim.bo[buf].synmaxcol = 0   -- 0 = unlimited
+
+  -- textwidth: buffer-local — prevents auto-wrap during cursor operations.
+  saved.textwidth = vim.bo[buf].textwidth
+  vim.bo[buf].textwidth = 0
+
+  -- hlsearch: global — suppress match highlighting during batch edits.
+  saved.hlsearch = vim.o.hlsearch
+  vim.o.hlsearch = false
+
+  -- concealcursor: window-local (BUG-01 applies). Save for concealed-syntax buffers.
+  -- NOTE: conceallevel is already saved above. This is a separate window-local option.
+  saved.concealcursor = vim.api.nvim_win_get_option(win, 'concealcursor')
+  vim.api.nvim_win_set_option(win, 'concealcursor', '')
 end
 
---- Restore all three saved options.
+--- Restore all saved options.
 --- Guards against invalid window (e.g., BufDelete path called from non-silent stop).
 ---@param session table
 local function _restore_options(session)
+  local buf   = session.buf
   local win   = session.win
   local saved = session._saved.opts
 
@@ -81,6 +101,20 @@ local function _restore_options(session)
 
   -- guicursor: global scope (restore unconditionally, even though we didn't modify it)
   vim.o.guicursor = saved.guicursor
+
+  -- synmaxcol/textwidth: buffer-local; guard if buffer was deleted
+  if vim.api.nvim_buf_is_valid(buf) then
+    vim.bo[buf].synmaxcol = saved.synmaxcol
+    vim.bo[buf].textwidth = saved.textwidth
+  end
+
+  -- hlsearch: global
+  vim.o.hlsearch = saved.hlsearch
+
+  -- concealcursor: window-local; guard if window was closed
+  if vim.api.nvim_win_is_valid(win) then
+    vim.api.nvim_win_set_option(win, 'concealcursor', saved.concealcursor)
+  end
 end
 
 --- Install one buffer-local keymap for this session, saving any pre-existing mapping.
