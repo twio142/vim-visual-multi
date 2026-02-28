@@ -2,6 +2,14 @@
 --- Provides: ns, define_groups, draw_cursor, draw_selection, clear, clear_region
 --- Tier-0: no requires to any other visual-multi module at module load time.
 --- clear() lazy-requires visual-multi.util for is_session dispatch only.
+---
+--- Phase-3 highlight groups (VM_ prefix):
+---   VM_Cursor          — primary cursor (cursor mode)
+---   VM_CursorSecondary — secondary cursors (cursor mode)
+---   VM_Extend          — primary selection (extend mode)
+---   VM_ExtendSecondary — secondary selections (extend mode)
+---   VM_Insert          — insert mode indicator (Phase 5+)
+---   VM_Search          — search match highlight (Phase 6+)
 
 local M = {}
 
@@ -11,11 +19,17 @@ M.ns = vim.api.nvim_create_namespace('visual_multi')
 
 --- Define all VM highlight groups with default=true so user colorschemes win.
 --- Call once on plugin setup (or lazy on first use).
+--- Groups use VM_ prefix (Phase 3 contract) for namespacing and clarity.
 function M.define_groups()
-  vim.api.nvim_set_hl(0, 'VMCursor', { default = true, link = 'Cursor' })
-  vim.api.nvim_set_hl(0, 'VMExtend', { default = true, link = 'Visual' })
-  vim.api.nvim_set_hl(0, 'VMInsert', { default = true, link = 'DiffChange' })
-  vim.api.nvim_set_hl(0, 'VMSearch', { default = true, link = 'Search' })
+  -- Cursor mode
+  vim.api.nvim_set_hl(0, 'VM_Cursor',          { default = true, link = 'Visual'    })
+  vim.api.nvim_set_hl(0, 'VM_CursorSecondary', { default = true, link = 'Cursor'    })
+  -- Extend mode
+  vim.api.nvim_set_hl(0, 'VM_Extend',          { default = true, link = 'PmenuSel'  })
+  vim.api.nvim_set_hl(0, 'VM_ExtendSecondary', { default = true, link = 'PmenuSbar' })
+  -- Reserved for Phase 5 and Phase 6 (defined now so colorscheme links work)
+  vim.api.nvim_set_hl(0, 'VM_Insert',          { default = true, link = 'DiffChange'})
+  vim.api.nvim_set_hl(0, 'VM_Search',          { default = true, link = 'Search'    })
 end
 
 --- Place or update a cursor extmark at (row, col).
@@ -31,7 +45,7 @@ function M.draw_cursor(buf, row, col, mark_id)
     id       = mark_id,
     end_row  = row,
     end_col  = col + 1,
-    hl_group = 'VMCursor',
+    hl_group = 'VM_CursorSecondary',
     priority = 200,
     hl_mode  = 'combine',
     strict   = false,
@@ -50,7 +64,7 @@ function M.draw_selection(buf, row, scol, ecol, mark_id)
     id       = mark_id,
     end_row  = row,
     end_col  = ecol,
-    hl_group = 'VMExtend',
+    hl_group = 'VM_ExtendSecondary',
     priority = 200,
     hl_mode  = 'combine',
     strict   = false,
