@@ -15,6 +15,9 @@ vim.opt.runtimepath:prepend(repo_root)
 local mini_test_path = repo_root .. '/test/vendor/mini.test/init.lua'
 local MiniTest = dofile(mini_test_path)
 
+-- Setup mini.test — this sets _G.MiniTest so spec files can access it as a global.
+MiniTest.setup()
+
 -- Collect spec files
 local spec_pattern = repo_root .. '/test/spec/*_spec.lua'
 local spec_files = vim.fn.glob(spec_pattern, false, true)
@@ -24,5 +27,10 @@ if #spec_files == 0 then
   vim.cmd('qa!')
 end
 
--- Run all specs. MiniTest.run exits the process with appropriate code.
-MiniTest.run({ paths = spec_files })
+-- Run all specs using the correct collect.find_files API.
+-- MiniTest.run exits the process with appropriate exit code.
+MiniTest.run({
+  collect = {
+    find_files = function() return spec_files end,
+  },
+})
