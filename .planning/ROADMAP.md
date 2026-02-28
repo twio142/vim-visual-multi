@@ -82,7 +82,12 @@ Plans:
   3. Case conversion (`~`, `gu`, `gU`) applies at all cursor positions in one undo step
   4. `<C-a>` and `<C-x>` increment/decrement numbers at all cursors; `g<C-a>` applies sequential values
   5. Dot-repeat (`.`) replays the last normal-mode operation across all cursors
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — session.lua Phase 4 option patch (synmaxcol/textwidth/hlsearch/concealcursor) + edit.lua skeleton + edit_spec.lua scaffold
+- [ ] 04-02-PLAN.md — edit.lua core: M.exec feedkeys loop, M.yank/paste per-cursor register, M.dot, c-operator delete-half; FEAT-05 + FEAT-06 tests
+- [ ] 04-03-PLAN.md — edit.lua special ops: M.g_increment sequential, case/replace thin wrappers; FEAT-10 tests
 
 ### Phase 5: Insert Mode
 **Goal**: Entering insert mode with multiple cursors replicates keystrokes at all cursor positions simultaneously, with clean exit and per-cursor register isolation
@@ -141,7 +146,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 1. Foundation | 4/4 | Complete   | 2026-02-28 |
 | 2. Session Lifecycle | 1/1 | Complete | 2026-02-28 |
 | 3. Region and Highlight | 2/2 | Complete   | 2026-02-28 |
-| 4. Normal-Mode Operations | 0/TBD | Not started | - |
+| 4. Normal-Mode Operations | 0/3 | Not started | - |
 | 5. Insert Mode | 0/TBD | Not started | - |
 | 6. Search, Entry Points, and Advanced Commands | 0/TBD | Not started | - |
 | 7. Configuration Surface and Plugin API | 0/TBD | Not started | - |
