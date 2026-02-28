@@ -131,7 +131,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 1/4 | In Progress|  |
+| 1. Foundation | 2/4 | In Progress|  |
 | 2. Session Lifecycle | 0/TBD | Not started | - |
 | 3. Region and Highlight | 0/TBD | Not started | - |
 | 4. Normal-Mode Operations | 0/TBD | Not started | - |

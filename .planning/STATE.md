@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-02-28)
 ## Current Position
 
 Phase: 1 of 8 (Foundation)
-Plan: 1 of 4 in current phase
+Plan: 2 of 4 in current phase
 Status: In progress
-Last activity: 2026-02-28 — Completed 01-01 (branch, plugin shim, mini.test vendor, test runner)
+Last activity: 2026-02-28 — Completed 01-02 (config.lua, util.lua, 19 tests pass)
 
-Progress: [█░░░░░░░░░] 3%
+Progress: [██░░░░░░░░] 6%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
+- Total plans completed: 2
 - Average duration: 3 min
-- Total execution time: 0.05 hours
+- Total execution time: 0.1 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-foundation | 1 | 3 min | 3 min |
+| 01-foundation | 2 | 6 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (3 min)
-- Trend: -
+- Last 5 plans: 01-01 (3 min), 01-02 (3 min)
+- Trend: stable
 
 *Updated after each plan completion*
 
@@ -48,6 +48,10 @@ Recent decisions affecting current work:
 - [Pre-planning]: Neovim 0.10+ minimum — use vim.iter, refined vim.bo/vim.wo, stable hl_mode on extmarks
 - [01-01]: Use dofile() to load mini.test — dot in directory name 'mini.test' prevents require() path resolution
 - [01-01]: Use debug.getinfo(1,'S').source for script path under nvim -l — vim.fn.expand('<sfile>') returns empty string
+- [01-02]: mini.test hooks use new_set({ hooks: { pre_case, post_case } }) API — not string key T['before_each'] assignment
+- [01-02]: mini.test spec files use global MiniTest (set by MiniTest.setup()) — not require()
+- [01-02]: run_spec.lua uses collect.find_files API — not the non-existent paths key
+- [01-02]: is_session() uses _stopped sentinel field presence — both _stopped=false and _stopped=true are valid sessions
 
 ### Pending Todos
 
@@ -62,5 +66,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-28
-Stopped at: Completed 01-01-PLAN.md (branch, plugin shim, mini.test vendor, test runner)
+Stopped at: Completed 01-02-PLAN.md (config.lua, util.lua, 19 mini.test specs pass)
 Resume file: None
