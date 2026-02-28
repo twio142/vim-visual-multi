@@ -7,8 +7,8 @@
 
 ### Implementation
 
-- [ ] **LUA-01**: Plugin runs entirely in Lua — no VimScript autoload files in runtime path
-- [ ] **LUA-02**: Targets Neovim 0.10+ only — uses vim.api, vim.keymap.set, extmarks, nvim_create_autocmd
+- [x] **LUA-01**: Plugin runs entirely in Lua — no VimScript autoload files in runtime path
+- [x] **LUA-02**: Targets Neovim 0.10+ only — uses vim.api, vim.keymap.set, extmarks, nvim_create_autocmd
 - [ ] **LUA-03**: No Python dependency — byte operations replaced with nvim_buf_get_offset
 
 ### Configuration API
@@ -68,8 +68,8 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| LUA-01 | Phase 1 | Pending |
-| LUA-02 | Phase 1 | Pending |
+| LUA-01 | Phase 1 | Complete |
+| LUA-02 | Phase 1 | Complete |
 | LUA-03 | Phase 1 | Pending |
 | CFG-01 | Phase 2 | Pending |
 | CFG-02 | Phase 7 | Pending |
