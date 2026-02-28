@@ -140,7 +140,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete   | 2026-02-28 |
 | 2. Session Lifecycle | 1/1 | Complete | 2026-02-28 |
-| 3. Region and Highlight | 0/2 | Not started | - |
+| 3. Region and Highlight | 1/2 | In Progress|  |
 | 4. Normal-Mode Operations | 0/TBD | Not started | - |
 | 5. Insert Mode | 0/TBD | Not started | - |
 | 6. Search, Entry Points, and Advanced Commands | 0/TBD | Not started | - |

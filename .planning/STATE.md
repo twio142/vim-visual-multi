@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-02-28T14:19:06.951Z"
+last_updated: "2026-02-28T15:00:00.000Z"
 progress:
-  total_phases: 2
+  total_phases: 8
   completed_phases: 2
-  total_plans: 5
-  completed_plans: 5
+  total_plans: 6
+  completed_plans: 6
 ---
 
 # Project State
@@ -18,16 +18,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-28)
 
 **Core value:** All existing multi-cursor behaviors work identically after the rewrite — users lose no functionality, and configuration becomes ergonomic via setup()
-**Current focus:** Phase 2 — Session Lifecycle
+**Current focus:** Phase 3 — Region and Highlight
 
 ## Current Position
 
-Phase: 2 of 8 (Session Lifecycle)
+Phase: 3 of 8 (Region and Highlight)
 Plan: 1 of 1 in current phase (complete)
-Status: Phase 2 plan 1 complete
-Last activity: 2026-02-28 — Completed 02-01 (session.lua, session_spec.lua, 63 tests pass)
+Status: Phase 3 plan 1 complete
+Last activity: 2026-02-28 — Completed 03-01 (VM_ highlight groups, Region sel_mark_id/anchor_mark_id/tip_mark_id/mode, session primary_idx, 63 tests pass)
 
-Progress: [█████░░░░░] 15%
+Progress: [██████░░░░] 20%
 
 ## Performance Metrics
 
@@ -42,15 +42,17 @@ Progress: [█████░░░░░] 15%
 |-------|-------|-------|----------|
 | 01-foundation | 4 | 10 min | 2.5 min |
 | 02-session-lifecycle | 1 | 2 min | 2 min |
+| 03-region-and-highlight | 1 | 3 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (3 min), 01-02 (3 min), 01-03 (2 min), 01-04 (2 min), 02-01 (2 min)
+- Last 5 plans: 01-03 (2 min), 01-04 (2 min), 02-01 (2 min), 03-01 (3 min)
 - Trend: stable
 
 *Updated after each plan completion*
 | Phase 01-foundation P03 | 2 | 2 tasks | 4 files |
 | Phase 01-foundation P04 | 2 | 2 tasks | 2 files |
 | Phase 02-session-lifecycle P01 | 2 | 2 tasks | 2 files |
+| Phase 03-region-and-highlight P01 | 3 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -80,6 +82,12 @@ Recent decisions affecting current work:
 - [02-01]: nvim_buf_call wraps maparg call for buffer-local keymap lookup — ensures correct buffer context in headless tests
 - [02-01]: sessions[buf] = nil set first in stop() to prevent double-stop race with BufDelete + manual Esc
 - [02-01]: Phase 2 scope installs only v keymap; full keymap table deferred to Phase 6
+- [03-01]: VM_ prefix chosen for highlight groups — clearer namespace separation vs VMX prefix
+- [03-01]: draw_cursor/draw_selection use VM_CursorSecondary/VM_ExtendSecondary by default — redraw() chooses primary/secondary per-cursor
+- [03-01]: Region.new mode parameter defaults to 'cursor' — backward compat with 63 existing specs
+- [03-01]: anchor_mark_id only created when mode='extend' AND anchor table provided — no unnecessary extmarks in cursor mode
+- [03-01]: tip_mark_id=nil reserved for redraw engine — not created by Region.new, set externally by Phase 3 Wave 2
+- [03-01]: primary_idx=0 sentinel means no cursors added yet (0 not -1 to avoid off-by-one with 1-indexed Lua arrays)
 
 ### Pending Todos
 
@@ -94,5 +102,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-28
-Stopped at: Completed 02-01-PLAN.md (session.lua, session_spec.lua, 63 mini.test specs pass — Phase 2 plan 1 complete)
+Stopped at: Completed 03-01-PLAN.md (VM_ highlight groups, Region sel_mark_id/anchor_mark_id/mode, session primary_idx, 63 mini.test specs pass — Phase 3 plan 1 complete)
 Resume file: None
