@@ -32,22 +32,23 @@ Progress: [████░░░░░░] 12%
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: 2.7 min
-- Total execution time: 0.1 hours
+- Total plans completed: 4
+- Average duration: 2.5 min
+- Total execution time: 0.2 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-foundation | 3 | 8 min | 2.7 min |
+| 01-foundation | 4 | 10 min | 2.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (3 min), 01-02 (3 min), 01-03 (2 min)
+- Last 5 plans: 01-01 (3 min), 01-02 (3 min), 01-03 (2 min), 01-04 (2 min)
 - Trend: stable
 
 *Updated after each plan completion*
 | Phase 01-foundation P03 | 2 | 2 tasks | 4 files |
+| Phase 01-foundation P04 | 2 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -70,6 +71,9 @@ Recent decisions affecting current work:
 - [01-03]: region.lua lazy-requires highlight inside each method — clean Tier-1 boundary, no load-order issues
 - [01-03]: Region:pos() always reads live from extmark API — no cached position field (always authoritative)
 - [01-03]: Region tables satisfy util.is_session() via shared _stopped sentinel — intentional duck-typed design
+- [01-04]: flush_undo_history uses undojoin not nvim_buf_set_lines no-op — avoids modifying buffer content
+- [01-04]: undojoin wrapped in pcall to guard against invalid-context errors (e.g., after redo)
+- [01-04]: spec hooks fixed from plan's T['before_each'] to correct MiniTest.new_set({ hooks: { pre_case, post_case } }) API
 
 ### Pending Todos
 
@@ -84,5 +88,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-28
-Stopped at: Completed 01-03-PLAN.md (highlight.lua, region.lua, 39 mini.test specs pass)
+Stopped at: Completed 01-04-PLAN.md (undo.lua, undo_spec.lua, 39 mini.test specs pass — Phase 1 complete)
 Resume file: None
