@@ -1,9 +1,9 @@
 ---
 gsd_state_version: 1.0
 milestone: v1.0
-milestone_name: milestone
-status: unknown
-last_updated: "2026-03-01T12:19:00.040Z"
+milestone_name: Lua Rewrite Foundation
+status: complete
+last_updated: "2026-03-01T14:00:00.000Z"
 progress:
   total_phases: 5
   completed_phases: 5
@@ -15,26 +15,25 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-02-28)
+See: .planning/PROJECT.md (updated 2026-03-01)
 
 **Core value:** All existing multi-cursor behaviors work identically after the rewrite — users lose no functionality, and configuration becomes ergonomic via setup()
-**Current focus:** Phase 4.1 — Gap Closure (v1.0 audit fixes)
+**Current focus:** Planning next milestone (v2.0 Full Feature Parity — Phases 5-8)
 
 ## Current Position
 
-Phase: 4.1 of 8 (Gap Closure — v1.0 audit)
-Plan: 1 of 1 in current phase (complete)
-Status: Phase 4.1 complete (all 1 plans done); v1.0 audit gaps FEAT-07 and FEAT-06/FEAT-10 closed
-Last activity: 2026-03-01 — Completed 04.1-01 (define_groups wired into M.setup, undojoin added to g_increment; 102 tests passing)
+Phase: v1.0 COMPLETE (Phases 1–4.1)
+Status: Milestone shipped — 5 phases, 11 plans, 102 tests, 0 failures
+Last activity: 2026-03-01 — v1.0 milestone archived (MILESTONES.md, ROADMAP.md, PROJECT.md updated)
 
-Progress: [█████░░░░░] 52%
+Next: `/gsd:new-milestone` to plan v2.0 (insert mode, search, config surface, E2E validation)
 
 ## Performance Metrics
 
-**Velocity:**
-- Total plans completed: 9
-- Average duration: 2.3 min
-- Total execution time: 0.4 hours
+**v1.0 Velocity:**
+- Total plans completed: 11
+- Average duration: 3.5 min/plan
+- Total execution time: ~0.7 hours
 
 **By Phase:**
 
@@ -43,92 +42,35 @@ Progress: [█████░░░░░] 52%
 | 01-foundation | 4 | 10 min | 2.5 min |
 | 02-session-lifecycle | 1 | 2 min | 2 min |
 | 03-region-and-highlight | 2 | 11 min | 5.5 min |
-| 04-normal-mode-operations | 2 | 9 min | 4.5 min |
+| 04-normal-mode-operations | 3 | 12 min | 4 min |
 | 04.1-gap-closure | 1 | 2 min | 2 min |
-
-**Recent Trend:**
-- Last 5 plans: 03-01 (3 min), 03-02 (8 min), 04-01 (2 min), 04-03 (3 min), 04.1-01 (2 min)
-- Trend: stable
-
-*Updated after each plan completion*
-| Phase 01-foundation P03 | 2 | 2 tasks | 4 files |
-| Phase 01-foundation P04 | 2 | 2 tasks | 2 files |
-| Phase 02-session-lifecycle P01 | 2 | 2 tasks | 2 files |
-| Phase 03-region-and-highlight P01 | 3 | 2 tasks | 4 files |
-| Phase 03-region-and-highlight P02 | 8 | 2 tasks | 4 files |
-| Phase 04-normal-mode-operations P01 | 2 | 2 tasks | 3 files |
-| Phase 04-normal-mode-operations P02 | 7 | 2 tasks | 2 files |
-| Phase 04-normal-mode-operations P03 | 3 | 2 tasks | 2 files |
-| Phase 04.1-gap-closure P01 | 2 | 3 tasks | 4 files |
 
 ## Accumulated Context
 
 ### Decisions
 
-Decisions are logged in PROJECT.md Key Decisions table.
-Recent decisions affecting current work:
+All decisions logged in PROJECT.md Key Decisions table (updated 2026-03-01).
 
-- [Pre-planning]: Start fresh from master (VimL), not from 001-lua-nvim-rewrite branch — prior branch as reference only
-- [Pre-planning]: No backward compat with g:VM_xxx — setup() only, clean break
-- [Pre-planning]: Drop Python dependency — nvim_buf_get_offset replaces line2byte()
-- [Pre-planning]: Neovim 0.10+ minimum — use vim.iter, refined vim.bo/vim.wo, stable hl_mode on extmarks
-- [01-01]: Use dofile() to load mini.test — dot in directory name 'mini.test' prevents require() path resolution
-- [01-01]: Use debug.getinfo(1,'S').source for script path under nvim -l — vim.fn.expand('<sfile>') returns empty string
-- [01-02]: mini.test hooks use new_set({ hooks: { pre_case, post_case } }) API — not string key T['before_each'] assignment
-- [01-02]: mini.test spec files use global MiniTest (set by MiniTest.setup()) — not require()
-- [01-02]: run_spec.lua uses collect.find_files API — not the non-existent paths key
-- [01-02]: is_session() uses _stopped sentinel field presence — both _stopped=false and _stopped=true are valid sessions
-- [01-03]: highlight.lua is Tier-0 — never requires region.lua; util is lazy-required only in clear() to prevent load-order circularity
-- [01-03]: region.lua lazy-requires highlight inside each method — clean Tier-1 boundary, no load-order issues
-- [01-03]: Region:pos() always reads live from extmark API — no cached position field (always authoritative)
-- [01-03]: Region tables satisfy util.is_session() via shared _stopped sentinel — intentional duck-typed design
-- [01-04]: flush_undo_history uses undojoin not nvim_buf_set_lines no-op — avoids modifying buffer content
-- [01-04]: undojoin wrapped in pcall to guard against invalid-context errors (e.g., after redo)
-- [01-04]: spec hooks fixed from plan's T['before_each'] to correct MiniTest.new_set({ hooks: { pre_case, post_case } }) API
-- [02-01]: guicursor modification deferred to Phase 3 — VimScript source uses matchadd not guicursor; save/restore infra present but modification skipped
-- [02-01]: nvim_buf_call wraps maparg call for buffer-local keymap lookup — ensures correct buffer context in headless tests
-- [02-01]: sessions[buf] = nil set first in stop() to prevent double-stop race with BufDelete + manual Esc
-- [02-01]: Phase 2 scope installs only v keymap; full keymap table deferred to Phase 6
-- [03-01]: VM_ prefix chosen for highlight groups — clearer namespace separation vs VMX prefix
-- [03-01]: draw_cursor/draw_selection use VM_CursorSecondary/VM_ExtendSecondary by default — redraw() chooses primary/secondary per-cursor
-- [03-01]: Region.new mode parameter defaults to 'cursor' — backward compat with 63 existing specs
-- [03-01]: anchor_mark_id only created when mode='extend' AND anchor table provided — no unnecessary extmarks in cursor mode
-- [03-01]: tip_mark_id=nil reserved for redraw engine — not created by Region.new, set externally by Phase 3 Wave 2
-- [03-01]: primary_idx=0 sentinel means no cursors added yet (0 not -1 to avoid off-by-one with 1-indexed Lua arrays)
-- [03-02]: Read-then-clear-then-draw order in redraw() — positions must be cached before nvim_buf_clear_namespace to avoid reading stale deleted marks
-- [03-02]: No id= in redraw draw helpers — after clear_namespace old IDs are invalid; create new marks, store returned IDs back
-- [03-02]: Dual-extmark for extend mode — sel_mark_id = selection span (priority 200), tip_mark_id = cursor-tip overlay (priority 201)
-- [03-02]: anchor recreated each redraw with right_gravity=false to preserve position tracking after buffer edits
-- [03-02]: toggle_mode() now calls hl.redraw(session); set_mode/set_cursor_mode/set_extend_mode do NOT call redraw (Phase 4+ callers manage)
-- [04-01]: synmaxcol set to 0 (unlimited) during session — prevents syntax engine from truncating long lines during batch edits
-- [04-01]: textwidth set to 0 during session — prevents auto-wrap from corrupting multi-cursor deletions/insertions
-- [04-01]: hlsearch disabled globally during session — suppresses distracting match highlighting during batch operations
-- [04-01]: concealcursor set to empty string — disables concealment at cursor position in concealed-syntax buffers
-- [04-01]: edit.lua dot() is the only non-stub export — delegates to exec(), making the forward reference safe
-- [04-01]: Behavior tests in edit_spec.lua are intentionally failing stubs — they document Plan 02 contracts, not Plan 01 output
-- [Phase 04-02]: undojoin between cursor iterations is what achieves single-undo-entry grouping for feedkeys-based edits
-- [Phase 04-02]: file-backed buffers via tempname+vim.cmd('edit') required for undo tracking in tests; buftype=nofile sets undolevels=-123456
-- [Phase 04-02]: M.change exported as _exec_change alias delegating to M.exec with black-hole register for Phase 6 keymap wiring
-- [Phase 04-03]: M.g_increment uses _top_to_bottom order: step 1 for lowest line cursor, step 2 for next — matches g<C-a> semantics
-- [Phase 04-03]: string.rep('<C-a>', step) encodes step repetitions; nvim_replace_termcodes applied to whole string per cursor
-- [Phase 04-03]: case/replace wrappers are intentionally thin one-liners delegating to M.exec — no duplication of undo/redraw logic
-- [Phase 04-03]: undo count tests require undolevels=-1 flush after local nvim_buf_set_lines before measuring seq_cur baseline
-- [Phase 04.1-01]: GAP-01: define_groups() added as second line in M.setup() — ensures VM_ groups registered at plugin load (FEAT-07)
-- [Phase 04.1-01]: GAP-02: g_increment loop now uses first/undojoin pattern identical to M.exec — N cursors produce 1 undo entry (FEAT-06, FEAT-10)
-- [Phase 04.1-01]: All multi-cursor feedkeys loops must use first/undojoin pattern for FEAT-06 compliance
+Key carry-forward patterns for next milestone:
+- **undojoin-for-all-feedkeys-loops**: every multi-cursor feedkeys loop uses first/undojoin pattern
+- **define_groups() in setup()**: highlight groups registered at plugin load, not lazily
+- **nvim_create_buf(false, false)**: all undo test buffers use this (scratch buffers disable undo)
+- **Tier-0 highlight.lua**: highlight module never requires region.lua (circular dependency)
+- **Interface-first planning**: write spec stubs before implementation — catches contract mismatches early
+- **Audit before shipping**: run `/gsd:audit-milestone` before marking milestone done, not after
 
 ### Pending Todos
 
-None yet.
+None.
 
-### Blockers/Concerns
+### Blockers/Concerns for v2.0
 
-- [Research]: PITFALL-06 (operator-pending getchar blocking) has no fully specified prevention strategy — needs spike before Phase 4/5. Consider vim.on_key vs <expr> mapping for operator capture.
-- [Research]: Interactive behavioral validation cannot be covered by headless unit tests alone — manual test plan for insert mode, operator-pending, and mouse cursors must be written before Phase 8.
+- [Research]: PITFALL-06 (operator-pending getchar blocking) — prevention strategy unspecified; spike needed before Phase 5. Consider vim.on_key vs <expr> mapping for operator capture.
+- [Research]: Interactive behavioral validation requires manual test plan for insert mode, operator-pending, mouse cursors (before Phase 8).
 - [Research]: Surround integration compatibility boundary not fully specified — clarify during Phase 6.
 
 ## Session Continuity
 
 Last session: 2026-03-01
-Stopped at: Completed 04.1-01-PLAN.md (define_groups wired into M.setup, undojoin added to g_increment; 102 tests passing — v1.0 audit gaps closed)
+Stopped at: v1.0 milestone completion — all archives created, PROJECT.md evolved, git tag v1.0 pending
 Resume file: None

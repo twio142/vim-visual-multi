@@ -1,107 +1,37 @@
 # Roadmap: vim-visual-multi Lua Rewrite
 
-## Overview
+## Milestones
 
-This roadmap ports the VimScript/Python multi-cursor plugin to pure Lua, targeting Neovim 0.10+. The build order follows the 5-tier module dependency graph: foundations first, then session lifecycle, then the rendering layer, then operations, then the full config surface and validation. Each phase delivers a complete, unit-testable capability before the next phase is written. The prior `001-lua-nvim-rewrite` branch established the architecture and confirmed behavioral parity — this rewrite starts clean from master using that branch as a reference.
+- ✅ **v1.0 Lua Rewrite Foundation** — Phases 1–4.1 (shipped 2026-03-01)
+- 🚧 **v2.0 Full Feature Parity** — Phases 5–8 (planned)
 
 ## Phases
 
+<details>
+<summary>✅ v1.0 Lua Rewrite Foundation (Phases 1–4.1) — SHIPPED 2026-03-01</summary>
+
+- [x] Phase 1: Foundation (4/4 plans) — completed 2026-02-28
+- [x] Phase 2: Session Lifecycle (1/1 plans) — completed 2026-02-28
+- [x] Phase 3: Region and Highlight (2/2 plans) — completed 2026-02-28
+- [x] Phase 4: Normal-Mode Operations (3/3 plans) — completed 2026-03-01
+- [x] Phase 4.1: Gap Closure — Highlight Init and g_increment Undo Wiring (1/1 plans) — completed 2026-03-01
+
+See `.planning/milestones/v1.0-ROADMAP.md` for full phase details.
+
+</details>
+
+### 🚧 v2.0 Full Feature Parity (Planned)
+
 **Phase Numbering:**
 - Integer phases (1, 2, 3): Planned milestone work
-- Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
+- Decimal phases (4.1): Urgent insertions (marked with INSERTED)
 
-Decimal phases appear between their surrounding integers in numeric order.
-
-- [x] **Phase 1: Foundation** - Tier 0-1 module scaffolding: config, util, highlight, region, undo with pitfall guards baked in (completed 2026-02-28)
-- [x] **Phase 2: Session Lifecycle** - Session start/stop, option save/restore, keymap management, reentrancy guard (completed 2026-02-28)
-- [x] **Phase 3: Region and Highlight** - Extmark-based region tracking, cursor/extend-mode rendering, eco-mode batch updates (completed 2026-02-28)
-- [x] **Phase 4: Normal-Mode Operations** - d/c/y/p/case/numbers at all cursors with correct undo grouping (completed 2026-03-01)
 - [ ] **Phase 5: Insert Mode** - Simultaneous keystroke replication, InsertLeave sync, per-cursor registers
 - [ ] **Phase 6: Search, Entry Points, and Advanced Commands** - C-n, select-all, skip/remove/filter regions, align, transpose, run-normal/macro
 - [ ] **Phase 7: Configuration Surface and Plugin API** - Full setup(opts) with all 34 g:VM_xxx options, Plug layer, statusline, theming, compat hooks
 - [ ] **Phase 8: Interactive E2E Validation** - Behavioral parity confirmation, bootstrap shim removal, autoload deletion
 
 ## Phase Details
-
-### Phase 1: Foundation
-**Goal**: Tier 0-1 modules (config, util, highlight, region, undo) are written, tested, and hardened against the 5 confirmed bugs and key pitfalls — providing a correct base for all higher-tier code
-**Depends on**: Nothing (first phase)
-**Requirements**: LUA-01, LUA-02, LUA-03
-**Success Criteria** (what must be TRUE):
-  1. Plugin loads without errors on Neovim 0.10+ with no VimScript autoload files in the runtime path
-  2. The mini.test suite runs headless and all Tier 0-1 module tests pass (0 failures)
-  3. `_is_session()` dispatch convention is in place — no duplicate function definitions exist in any module
-  4. `nvim_buf_get_offset` is the sole byte-offset API — no Python dependency, no `line2byte()` calls
-  5. Test buffers use `nvim_create_buf(false, false)` — undo tests actually exercise undo (BUG-02 prevented)
-**Plans**: 4 plans
-
-Plans:
-- [ ] 01-01-PLAN.md — Branch setup, mini.test vendor, plugin shim rewrite, init.lua skeleton, test runner
-- [ ] 01-02-PLAN.md — config.lua and util.lua (Tier-0 modules) with specs
-- [x] 01-03-PLAN.md — highlight.lua and region.lua (Tier-1 rendering modules) with specs
-- [ ] 01-04-PLAN.md — undo.lua (Tier-1 undo grouping) with BUG-02/03/04 regression spec
-
-### Phase 2: Session Lifecycle
-**Goal**: A multi-cursor session can be started and cleanly stopped, with all options, keymaps, and autocmds correctly saved and restored — no state leaks between sessions
-**Depends on**: Phase 1
-**Requirements**: CFG-01, FEAT-03
-**Success Criteria** (what must be TRUE):
-  1. `require('visual-multi').setup(opts)` is the sole entry point — no g:VM_xxx global is read or written
-  2. Starting a session in buffer A and stopping it leaves the buffer in exactly the state it was before (options, keymaps, cursor position)
-  3. Pre-existing user keymaps on buffer-local bindings are preserved after session exit (PITFALL-09 prevented)
-  4. Starting a session while one is already active in the same buffer does not double-initialize (PITFALL-11 prevented)
-  5. Cursor mode and extend mode toggle correctly via `v`; mode is reflected in session state
-**Plans**: 1 plan
-
-Plans:
-- [x] 02-01-PLAN.md — session.lua (Tier-2 lifecycle module) with start/stop/toggle_mode and session_spec.lua
-
-### Phase 3: Region and Highlight
-**Goal**: Regions (cursor and extend-mode selections) are tracked with extmarks and rendered correctly, with atomic teardown on session exit and no ghost highlights
-**Depends on**: Phase 2
-**Requirements**: FEAT-07
-**Success Criteria** (what must be TRUE):
-  1. Adding a cursor creates a visible extmark highlight at the correct buffer position
-  2. Moving a cursor updates the extmark in place — no stale highlights remain
-  3. Ending a session clears all extmarks atomically via `nvim_buf_clear_namespace` — no ghost highlights persist
-  4. Extend-mode regions display as visual selections; cursor-mode regions display as single-character highlights
-  5. Eco-mode batch updates complete without intermediate flicker during multi-cursor loops
-**Plans**: 2 plans
-
-Plans:
-- [ ] 03-01-PLAN.md — Data model migration: VM_ highlight groups, sel_mark_id/anchor_mark_id/tip_mark_id, primary_idx in session, spec updates
-- [ ] 03-02-PLAN.md — Redraw engine: highlight.redraw(session), _col_end, extend-mode dual-extmark, toggle_mode wiring, new specs
-
-### Phase 4: Normal-Mode Operations
-**Goal**: Standard normal-mode commands (d, c, y, p, case conversion, number increment/decrement, dot-repeat) execute simultaneously at all cursors and undo as a single operation
-**Depends on**: Phase 3
-**Requirements**: FEAT-05, FEAT-06, FEAT-10
-**Success Criteria** (what must be TRUE):
-  1. Pressing `d` with 3 cursors active deletes the word at each cursor position simultaneously
-  2. A single `u` undoes all cursor edits from the previous normal-mode command — not one cursor at a time
-  3. Case conversion (`~`, `gu`, `gU`) applies at all cursor positions in one undo step
-  4. `<C-a>` and `<C-x>` increment/decrement numbers at all cursors; `g<C-a>` applies sequential values
-  5. Dot-repeat (`.`) replays the last normal-mode operation across all cursors
-**Plans**: 3 plans
-
-Plans:
-- [ ] 04-01-PLAN.md — session.lua Phase 4 option patch (synmaxcol/textwidth/hlsearch/concealcursor) + edit.lua skeleton + edit_spec.lua scaffold
-- [ ] 04-02-PLAN.md — edit.lua core: M.exec feedkeys loop, M.yank/paste per-cursor register, M.dot, c-operator delete-half; FEAT-05 + FEAT-06 tests
-- [ ] 04-03-PLAN.md — edit.lua special ops: M.g_increment sequential, case/replace thin wrappers; FEAT-10 tests
-
-### Phase 4.1: Gap Closure — Highlight Init and g_increment Undo Wiring
-**Goal**: Close the two wiring gaps found by the v1.0 milestone audit — VM_ highlight groups are defined at startup and g_increment uses undojoin for correct multi-cursor undo
-**Gap Closure:** Closes gaps from v1.0 audit (MISSING-01, MISSING-02)
-**Requirements:** FEAT-07, FEAT-06, FEAT-10
-**Success Criteria** (what must be TRUE):
-  1. `highlight.define_groups()` is called from `M.setup()` in `init.lua` — VM_Cursor/VM_CursorSecondary/VM_Extend/VM_ExtendSecondary groups are defined at plugin load time
-  2. A spec confirms VM_ groups resolve (non-nil) after `require('visual-multi').setup()` is called
-  3. `g_increment` loop calls `vim.cmd('undojoin')` after the first cursor iteration — same pattern as `exec`
-  4. A multi-cursor spec confirms `g_increment` with N cursors produces exactly 1 undo entry (not N)
-**Plans**: 1 plan
-
-Plans:
-- [x] 04.1-01-PLAN.md — Wire define_groups() into setup(); add undojoin to g_increment; fix/extend multi-cursor undo specs
 
 ### Phase 5: Insert Mode
 **Goal**: Entering insert mode with multiple cursors replicates keystrokes at all cursor positions simultaneously, with clean exit and per-cursor register isolation
@@ -152,17 +82,14 @@ Plans:
 
 ## Progress
 
-**Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
-
-| Phase | Plans Complete | Status | Completed |
-|-------|----------------|--------|-----------|
-| 1. Foundation | 4/4 | Complete   | 2026-02-28 |
-| 2. Session Lifecycle | 1/1 | Complete | 2026-02-28 |
-| 3. Region and Highlight | 2/2 | Complete   | 2026-02-28 |
-| 4. Normal-Mode Operations | 3/3 | Complete   | 2026-03-01 |
-| 4.1. Gap Closure — Highlight Init and g_increment Undo Wiring | 1/1 | Complete | 2026-03-01 |
-| 5. Insert Mode | 0/TBD | Not started | - |
-| 6. Search, Entry Points, and Advanced Commands | 0/TBD | Not started | - |
-| 7. Configuration Surface and Plugin API | 0/TBD | Not started | - |
-| 8. Interactive E2E Validation | 0/TBD | Not started | - |
+| Phase | Milestone | Plans Complete | Status | Completed |
+|-------|-----------|----------------|--------|-----------|
+| 1. Foundation | v1.0 | 4/4 | Complete | 2026-02-28 |
+| 2. Session Lifecycle | v1.0 | 1/1 | Complete | 2026-02-28 |
+| 3. Region and Highlight | v1.0 | 2/2 | Complete | 2026-02-28 |
+| 4. Normal-Mode Operations | v1.0 | 3/3 | Complete | 2026-03-01 |
+| 4.1. Gap Closure | v1.0 | 1/1 | Complete | 2026-03-01 |
+| 5. Insert Mode | v2.0 | 0/TBD | Not started | - |
+| 6. Search, Entry Points, Advanced Commands | v2.0 | 0/TBD | Not started | - |
+| 7. Configuration Surface and Plugin API | v2.0 | 0/TBD | Not started | - |
+| 8. Interactive E2E Validation | v2.0 | 0/TBD | Not started | - |
