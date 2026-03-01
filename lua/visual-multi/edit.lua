@@ -240,11 +240,19 @@ function M.g_increment(session, direction)
     undo.begin_block(session)
 
     local order = _top_to_bottom(session)   -- top-to-bottom for sequential steps
+    local first = true
     for step, idx in ipairs(order) do
       local r = session.cursors[idx]
       if not r._stopped then
         local row, col = r:pos()
         pcall(vim.api.nvim_win_set_cursor, 0, { row + 1, col })
+        -- Join subsequent cursor edits into the first undo entry so that a single
+        -- `u` undoes all cursor changes atomically (FEAT-06 undo grouping contract).
+        if not first then
+          vim.api.nvim_buf_call(session.buf, function()
+            pcall(vim.cmd, 'silent! undojoin')
+          end)
+        end
         -- step = 1, 2, 3... (1-based ipairs); repeat <C-a>/<C-x> 'step' times
         local key_str
         if direction > 0 then
@@ -254,6 +262,7 @@ function M.g_increment(session, direction)
         end
         local encoded = vim.api.nvim_replace_termcodes(key_str, true, false, true)
         pcall(vim.api.nvim_feedkeys, encoded, 'x', false)
+        first = false
       end
     end
 

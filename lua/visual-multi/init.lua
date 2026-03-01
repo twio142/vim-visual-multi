@@ -15,6 +15,7 @@ M._sessions = _sessions
 ---@param opts table|nil
 function M.setup(opts)
   require('visual-multi.config').apply(opts)
+  require('visual-multi.highlight').define_groups()
 end
 
 --- Return the current session state for a buffer, or nil if no session is active.
