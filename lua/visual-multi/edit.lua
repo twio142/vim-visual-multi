@@ -231,7 +231,71 @@ M.change = _exec_change  -- exported for Phase 6 keymap wiring
 ---@param session   table
 ---@param direction integer  1 for increment (g<C-a>), -1 for decrement (g<C-x>)
 function M.g_increment(session, direction)
-  -- stub: Plan 03 implements
+  if session._stopped then return end
+  if #session.cursors == 0 then return end
+
+  local saved_ei = vim.o.eventignore
+  local ok, err = pcall(function()
+    vim.o.eventignore = 'all'
+    undo.begin_block(session)
+
+    local order = _top_to_bottom(session)   -- top-to-bottom for sequential steps
+    for step, idx in ipairs(order) do
+      local r = session.cursors[idx]
+      if not r._stopped then
+        local row, col = r:pos()
+        pcall(vim.api.nvim_win_set_cursor, 0, { row + 1, col })
+        -- step = 1, 2, 3... (1-based ipairs); repeat <C-a>/<C-x> 'step' times
+        local key_str
+        if direction > 0 then
+          key_str = string.rep('<C-a>', step)
+        else
+          key_str = string.rep('<C-x>', step)
+        end
+        local encoded = vim.api.nvim_replace_termcodes(key_str, true, false, true)
+        pcall(vim.api.nvim_feedkeys, encoded, 'x', false)
+      end
+    end
+
+    undo.end_block(session)
+  end)
+
+  vim.o.eventignore = saved_ei  -- ALWAYS restore (PITFALL-02)
+  if not ok then
+    vim.notify('[visual-multi] g_increment error: ' .. tostring(err), vim.log.levels.WARN)
+  end
+  session._vm_dot = direction > 0 and 'g\x01' or 'g\x18'  -- g<C-a> or g<C-x>
+  hl.redraw(session)
+end
+
+--- Toggle case at each cursor (~ key).
+--- Thin wrapper around M.exec — inherits undo grouping + eventignore.
+---@param session table
+function M.case_toggle(session)
+  M.exec(session, '~')
+end
+
+--- Convert to uppercase at each cursor (gU + word motion).
+--- Thin wrapper around M.exec.
+---@param session table
+---@param motion string  e.g. 'iw', 'w', '$'
+function M.case_upper(session, motion)
+  M.exec(session, 'gU' .. motion)
+end
+
+--- Convert to lowercase at each cursor (gu + word motion).
+---@param session table
+---@param motion string
+function M.case_lower(session, motion)
+  M.exec(session, 'gu' .. motion)
+end
+
+--- Replace character under each cursor with char.
+--- Thin wrapper: feedkeys 'r' + char.
+---@param session table
+---@param char string  single character to replace with
+function M.replace_char(session, char)
+  M.exec(session, 'r' .. char)
 end
 
 return M
