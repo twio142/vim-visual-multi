@@ -120,3 +120,9 @@ None - no external service configuration required.
 ---
 *Phase: 01-foundation*
 *Completed: 2026-02-28*
+
+## Self-Check: PASSED
+
+All files present: lua/visual-multi/undo.lua, test/spec/undo_spec.lua, .planning/phases/01-foundation/01-04-SUMMARY.md
+All commits present: cea8fad (Task 1), d198b63 (Task 2), dbff29b (docs)
+Test suite: 39/39 tests pass headless (exit=0, 5 spec files)
