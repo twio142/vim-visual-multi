@@ -30,8 +30,8 @@
 - [ ] **FEAT-02**: Pattern-based multi-select: VM-/ regex, find-under (C-n), select-all, visual entry points
 - [x] **FEAT-03**: Cursor mode and extend mode with switching between them (v key)
 - [ ] **FEAT-04**: Simultaneous insert mode — i/a/I/A/o/O replicated across all cursors
-- [ ] **FEAT-05**: Simultaneous normal mode commands — d, c, y, p, D, C, x, J, and all standard ops
-- [ ] **FEAT-06**: Undo grouping — all-cursor edits within a session undo as a single operation
+- [x] **FEAT-05**: Simultaneous normal mode commands — d, c, y, p, D, C, x, J, and all standard ops
+- [x] **FEAT-06**: Undo grouping — all-cursor edits within a session undo as a single operation
 - [x] **FEAT-07**: Extmark-based cursor/selection highlighting with full theming system (15 built-in themes + VMTheme command)
 
 ### Advanced Features
@@ -85,8 +85,8 @@
 | FEAT-02 | Phase 6 | Pending |
 | FEAT-03 | Phase 2 | Complete |
 | FEAT-04 | Phase 5 | Pending |
-| FEAT-05 | Phase 4 | Pending |
-| FEAT-06 | Phase 4 | Pending |
+| FEAT-05 | Phase 4 | Complete |
+| FEAT-06 | Phase 4 | Complete |
 | FEAT-07 | Phase 3 | Complete |
 | FEAT-08 | Phase 6 | Pending |
 | FEAT-09 | Phase 6 | Pending |

@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-02-28T19:16:08.104Z"
+last_updated: "2026-02-28T23:58:57Z"
 progress:
-  total_phases: 3
+  total_phases: 8
   completed_phases: 3
-  total_plans: 7
-  completed_plans: 7
+  total_plans: 8
+  completed_plans: 8
 ---
 
 # Project State
@@ -18,23 +18,23 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-28)
 
 **Core value:** All existing multi-cursor behaviors work identically after the rewrite — users lose no functionality, and configuration becomes ergonomic via setup()
-**Current focus:** Phase 3 — Region and Highlight
+**Current focus:** Phase 4 — Normal-mode Operations
 
 ## Current Position
 
-Phase: 3 of 8 (Region and Highlight)
-Plan: 2 of 2 in current phase (complete)
-Status: Phase 3 plan 2 complete
-Last activity: 2026-02-28 — Completed 03-02 (highlight.redraw engine, _col_end, toggle_mode anchor wiring, 73 tests pass)
+Phase: 4 of 8 (Normal-mode Operations)
+Plan: 1 of 3 in current phase (complete)
+Status: Phase 4 plan 1 complete
+Last activity: 2026-02-28 — Completed 04-01 (session.lua Phase 4 options, edit.lua skeleton, edit_spec.lua scaffold, 82 tests)
 
-Progress: [██████░░░░] 25%
+Progress: [███░░░░░░░] 31%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: 2.5 min
-- Total execution time: 0.2 hours
+- Total plans completed: 8
+- Average duration: 2.4 min
+- Total execution time: 0.3 hours
 
 **By Phase:**
 
@@ -43,9 +43,10 @@ Progress: [██████░░░░] 25%
 | 01-foundation | 4 | 10 min | 2.5 min |
 | 02-session-lifecycle | 1 | 2 min | 2 min |
 | 03-region-and-highlight | 2 | 11 min | 5.5 min |
+| 04-normal-mode-operations | 1 | 2 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-04 (2 min), 02-01 (2 min), 03-01 (3 min), 03-02 (8 min)
+- Last 5 plans: 02-01 (2 min), 03-01 (3 min), 03-02 (8 min), 04-01 (2 min)
 - Trend: stable
 
 *Updated after each plan completion*
@@ -54,6 +55,7 @@ Progress: [██████░░░░] 25%
 | Phase 02-session-lifecycle P01 | 2 | 2 tasks | 2 files |
 | Phase 03-region-and-highlight P01 | 3 | 2 tasks | 4 files |
 | Phase 03-region-and-highlight P02 | 8 | 2 tasks | 4 files |
+| Phase 04-normal-mode-operations P01 | 2 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -94,6 +96,12 @@ Recent decisions affecting current work:
 - [03-02]: Dual-extmark for extend mode — sel_mark_id = selection span (priority 200), tip_mark_id = cursor-tip overlay (priority 201)
 - [03-02]: anchor recreated each redraw with right_gravity=false to preserve position tracking after buffer edits
 - [03-02]: toggle_mode() now calls hl.redraw(session); set_mode/set_cursor_mode/set_extend_mode do NOT call redraw (Phase 4+ callers manage)
+- [04-01]: synmaxcol set to 0 (unlimited) during session — prevents syntax engine from truncating long lines during batch edits
+- [04-01]: textwidth set to 0 during session — prevents auto-wrap from corrupting multi-cursor deletions/insertions
+- [04-01]: hlsearch disabled globally during session — suppresses distracting match highlighting during batch operations
+- [04-01]: concealcursor set to empty string — disables concealment at cursor position in concealed-syntax buffers
+- [04-01]: edit.lua dot() is the only non-stub export — delegates to exec(), making the forward reference safe
+- [04-01]: Behavior tests in edit_spec.lua are intentionally failing stubs — they document Plan 02 contracts, not Plan 01 output
 
 ### Pending Todos
 
@@ -108,5 +116,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-28
-Stopped at: Completed 03-02-PLAN.md (highlight.redraw engine, _col_end, _draw_cursor_region, _draw_extend_region, toggle_mode anchor wiring, 73 mini.test specs pass — Phase 3 plan 2 complete)
+Stopped at: Completed 04-01-PLAN.md (session.lua Phase 4 options, edit.lua skeleton with 5 exports, edit_spec.lua scaffold, 82 total tests — Phase 4 plan 1 complete)
 Resume file: None

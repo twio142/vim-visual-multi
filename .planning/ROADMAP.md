@@ -146,7 +146,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 1. Foundation | 4/4 | Complete   | 2026-02-28 |
 | 2. Session Lifecycle | 1/1 | Complete | 2026-02-28 |
 | 3. Region and Highlight | 2/2 | Complete   | 2026-02-28 |
-| 4. Normal-Mode Operations | 0/3 | Not started | - |
+| 4. Normal-Mode Operations | 1/3 | In Progress|  |
 | 5. Insert Mode | 0/TBD | Not started | - |
 | 6. Search, Entry Points, and Advanced Commands | 0/TBD | Not started | - |
 | 7. Configuration Surface and Plugin API | 0/TBD | Not started | - |
