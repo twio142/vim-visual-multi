@@ -89,6 +89,20 @@ Plans:
 - [ ] 04-02-PLAN.md — edit.lua core: M.exec feedkeys loop, M.yank/paste per-cursor register, M.dot, c-operator delete-half; FEAT-05 + FEAT-06 tests
 - [ ] 04-03-PLAN.md — edit.lua special ops: M.g_increment sequential, case/replace thin wrappers; FEAT-10 tests
 
+### Phase 4.1: Gap Closure — Highlight Init and g_increment Undo Wiring
+**Goal**: Close the two wiring gaps found by the v1.0 milestone audit — VM_ highlight groups are defined at startup and g_increment uses undojoin for correct multi-cursor undo
+**Gap Closure:** Closes gaps from v1.0 audit (MISSING-01, MISSING-02)
+**Requirements:** FEAT-07, FEAT-06, FEAT-10
+**Success Criteria** (what must be TRUE):
+  1. `highlight.define_groups()` is called from `M.setup()` in `init.lua` — VM_Cursor/VM_CursorSecondary/VM_Extend/VM_ExtendSecondary groups are defined at plugin load time
+  2. A spec confirms VM_ groups resolve (non-nil) after `require('visual-multi').setup()` is called
+  3. `g_increment` loop calls `vim.cmd('undojoin')` after the first cursor iteration — same pattern as `exec`
+  4. A multi-cursor spec confirms `g_increment` with N cursors produces exactly 1 undo entry (not N)
+**Plans**: 1 plan
+
+Plans:
+- [ ] 04.1-01-PLAN.md — Wire define_groups() into setup(); add undojoin to g_increment; fix/extend multi-cursor undo specs
+
 ### Phase 5: Insert Mode
 **Goal**: Entering insert mode with multiple cursors replicates keystrokes at all cursor positions simultaneously, with clean exit and per-cursor register isolation
 **Depends on**: Phase 4
@@ -147,6 +161,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 2. Session Lifecycle | 1/1 | Complete | 2026-02-28 |
 | 3. Region and Highlight | 2/2 | Complete   | 2026-02-28 |
 | 4. Normal-Mode Operations | 3/3 | Complete   | 2026-03-01 |
+| 4.1. Gap Closure — Highlight Init and g_increment Undo Wiring | 0/1 | Not started | - |
 | 5. Insert Mode | 0/TBD | Not started | - |
 | 6. Search, Entry Points, and Advanced Commands | 0/TBD | Not started | - |
 | 7. Configuration Surface and Plugin API | 0/TBD | Not started | - |
