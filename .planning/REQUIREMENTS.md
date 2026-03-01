@@ -38,7 +38,7 @@
 
 - [ ] **FEAT-08**: Region lifecycle — skip region (q), remove region (Q), filter regions, one-per-line
 - [ ] **FEAT-09**: Alignment (align, align-char), number insertion (sequential/zero), transpose, rotate, split regions, duplicate regions
-- [ ] **FEAT-10**: Case conversion (upper/lower/title/cycle), replace-chars (r), replace mode (R), increase/decrease numbers (C-a/C-x/g-variants)
+- [x] **FEAT-10**: Case conversion (upper/lower/title/cycle), replace-chars (r), replace mode (R), increase/decrease numbers (C-a/C-x/g-variants)
 - [ ] **FEAT-11**: Run-normal, run-visual, run-ex, run-macro, dot-repeat — execute arbitrary commands at all cursors
 - [ ] **FEAT-12**: Per-cursor register management — VM unnamed register separate from Vim register
 - [ ] **FEAT-13**: Statusline integration — VMInfos() function, live cursor count and mode display
@@ -90,7 +90,7 @@
 | FEAT-07 | Phase 3 | Complete |
 | FEAT-08 | Phase 6 | Pending |
 | FEAT-09 | Phase 6 | Pending |
-| FEAT-10 | Phase 4 | Pending |
+| FEAT-10 | Phase 4 | Complete |
 | FEAT-11 | Phase 6 | Pending |
 | FEAT-12 | Phase 5 | Pending |
 | FEAT-13 | Phase 7 | Pending |

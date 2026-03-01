@@ -8,7 +8,7 @@ progress:
   total_phases: 4
   completed_phases: 3
   total_plans: 10
-  completed_plans: 9
+  completed_plans: 10
 ---
 
 # Project State
@@ -23,11 +23,11 @@ See: .planning/PROJECT.md (updated 2026-02-28)
 ## Current Position
 
 Phase: 4 of 8 (Normal-mode Operations)
-Plan: 2 of 3 in current phase (complete)
-Status: Phase 4 plan 2 complete
-Last activity: 2026-03-01 — Completed 04-02 (M.exec/yank/paste/dot/change in edit.lua, 89 tests passing)
+Plan: 3 of 3 in current phase (complete)
+Status: Phase 4 complete (all 3 plans done)
+Last activity: 2026-03-01 — Completed 04-03 (M.g_increment + case/replace wrappers; 100 tests passing — Phase 4 complete)
 
-Progress: [████░░░░░░] 38%
+Progress: [█████░░░░░] 50%
 
 ## Performance Metrics
 
@@ -57,6 +57,7 @@ Progress: [████░░░░░░] 38%
 | Phase 03-region-and-highlight P02 | 8 | 2 tasks | 4 files |
 | Phase 04-normal-mode-operations P01 | 2 | 2 tasks | 3 files |
 | Phase 04-normal-mode-operations P02 | 7 | 2 tasks | 2 files |
+| Phase 04-normal-mode-operations P03 | 3 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -106,6 +107,10 @@ Recent decisions affecting current work:
 - [Phase 04-02]: undojoin between cursor iterations is what achieves single-undo-entry grouping for feedkeys-based edits
 - [Phase 04-02]: file-backed buffers via tempname+vim.cmd('edit') required for undo tracking in tests; buftype=nofile sets undolevels=-123456
 - [Phase 04-02]: M.change exported as _exec_change alias delegating to M.exec with black-hole register for Phase 6 keymap wiring
+- [Phase 04-03]: M.g_increment uses _top_to_bottom order: step 1 for lowest line cursor, step 2 for next — matches g<C-a> semantics
+- [Phase 04-03]: string.rep('<C-a>', step) encodes step repetitions; nvim_replace_termcodes applied to whole string per cursor
+- [Phase 04-03]: case/replace wrappers are intentionally thin one-liners delegating to M.exec — no duplication of undo/redraw logic
+- [Phase 04-03]: undo count tests require undolevels=-1 flush after local nvim_buf_set_lines before measuring seq_cur baseline
 
 ### Pending Todos
 
@@ -120,5 +125,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-01
-Stopped at: Completed 04-02-PLAN.md (M.exec/yank/paste/dot/change in edit.lua; 89 tests passing — Phase 4 plan 2 complete)
+Stopped at: Completed 04-03-PLAN.md (M.g_increment + case/replace wrappers; 100 tests passing — Phase 4 complete)
 Resume file: None
