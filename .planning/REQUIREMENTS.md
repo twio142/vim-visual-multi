@@ -31,14 +31,14 @@
 - [x] **FEAT-03**: Cursor mode and extend mode with switching between them (v key)
 - [ ] **FEAT-04**: Simultaneous insert mode — i/a/I/A/o/O replicated across all cursors
 - [x] **FEAT-05**: Simultaneous normal mode commands — d, c, y, p, D, C, x, J, and all standard ops
-- [ ] **FEAT-06**: Undo grouping — all-cursor edits within a session undo as a single operation
-- [ ] **FEAT-07**: Extmark-based cursor/selection highlighting with full theming system (15 built-in themes + VMTheme command)
+- [x] **FEAT-06**: Undo grouping — all-cursor edits within a session undo as a single operation
+- [x] **FEAT-07**: Extmark-based cursor/selection highlighting with full theming system (15 built-in themes + VMTheme command)
 
 ### Advanced Features
 
 - [ ] **FEAT-08**: Region lifecycle — skip region (q), remove region (Q), filter regions, one-per-line
 - [ ] **FEAT-09**: Alignment (align, align-char), number insertion (sequential/zero), transpose, rotate, split regions, duplicate regions
-- [ ] **FEAT-10**: Case conversion (upper/lower/title/cycle), replace-chars (r), replace mode (R), increase/decrease numbers (C-a/C-x/g-variants)
+- [x] **FEAT-10**: Case conversion (upper/lower/title/cycle), replace-chars (r), replace mode (R), increase/decrease numbers (C-a/C-x/g-variants)
 - [ ] **FEAT-11**: Run-normal, run-visual, run-ex, run-macro, dot-repeat — execute arbitrary commands at all cursors
 - [ ] **FEAT-12**: Per-cursor register management — VM unnamed register separate from Vim register
 - [ ] **FEAT-13**: Statusline integration — VMInfos() function, live cursor count and mode display
@@ -86,11 +86,11 @@
 | FEAT-03 | Phase 2 | Complete |
 | FEAT-04 | Phase 5 | Pending |
 | FEAT-05 | Phase 4 | Complete |
-| FEAT-06 | Phase 4.1 | Pending |
-| FEAT-07 | Phase 4.1 | Pending |
+| FEAT-06 | Phase 4.1 | Complete |
+| FEAT-07 | Phase 4.1 | Complete |
 | FEAT-08 | Phase 6 | Pending |
 | FEAT-09 | Phase 6 | Pending |
-| FEAT-10 | Phase 4.1 | Pending |
+| FEAT-10 | Phase 4.1 | Complete |
 | FEAT-11 | Phase 6 | Pending |
 | FEAT-12 | Phase 5 | Pending |
 | FEAT-13 | Phase 7 | Pending |

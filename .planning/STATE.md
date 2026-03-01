@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-01T00:20:17.746Z"
+last_updated: "2026-03-01T12:14:48Z"
 progress:
   total_phases: 4
   completed_phases: 4
-  total_plans: 10
-  completed_plans: 10
+  total_plans: 11
+  completed_plans: 11
 ---
 
 # Project State
@@ -18,23 +18,23 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-28)
 
 **Core value:** All existing multi-cursor behaviors work identically after the rewrite — users lose no functionality, and configuration becomes ergonomic via setup()
-**Current focus:** Phase 4 — Normal-mode Operations
+**Current focus:** Phase 4.1 — Gap Closure (v1.0 audit fixes)
 
 ## Current Position
 
-Phase: 4 of 8 (Normal-mode Operations)
-Plan: 3 of 3 in current phase (complete)
-Status: Phase 4 complete (all 3 plans done)
-Last activity: 2026-03-01 — Completed 04-03 (M.g_increment + case/replace wrappers; 100 tests passing — Phase 4 complete)
+Phase: 4.1 of 8 (Gap Closure — v1.0 audit)
+Plan: 1 of 1 in current phase (complete)
+Status: Phase 4.1 complete (all 1 plans done); v1.0 audit gaps FEAT-07 and FEAT-06/FEAT-10 closed
+Last activity: 2026-03-01 — Completed 04.1-01 (define_groups wired into M.setup, undojoin added to g_increment; 102 tests passing)
 
-Progress: [█████░░░░░] 50%
+Progress: [█████░░░░░] 52%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
-- Average duration: 2.4 min
-- Total execution time: 0.3 hours
+- Total plans completed: 9
+- Average duration: 2.3 min
+- Total execution time: 0.4 hours
 
 **By Phase:**
 
@@ -44,9 +44,10 @@ Progress: [█████░░░░░] 50%
 | 02-session-lifecycle | 1 | 2 min | 2 min |
 | 03-region-and-highlight | 2 | 11 min | 5.5 min |
 | 04-normal-mode-operations | 2 | 9 min | 4.5 min |
+| 04.1-gap-closure | 1 | 2 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (2 min), 03-01 (3 min), 03-02 (8 min), 04-01 (2 min)
+- Last 5 plans: 03-01 (3 min), 03-02 (8 min), 04-01 (2 min), 04-03 (3 min), 04.1-01 (2 min)
 - Trend: stable
 
 *Updated after each plan completion*
@@ -58,6 +59,7 @@ Progress: [█████░░░░░] 50%
 | Phase 04-normal-mode-operations P01 | 2 | 2 tasks | 3 files |
 | Phase 04-normal-mode-operations P02 | 7 | 2 tasks | 2 files |
 | Phase 04-normal-mode-operations P03 | 3 | 2 tasks | 2 files |
+| Phase 04.1-gap-closure P01 | 2 | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -111,6 +113,9 @@ Recent decisions affecting current work:
 - [Phase 04-03]: string.rep('<C-a>', step) encodes step repetitions; nvim_replace_termcodes applied to whole string per cursor
 - [Phase 04-03]: case/replace wrappers are intentionally thin one-liners delegating to M.exec — no duplication of undo/redraw logic
 - [Phase 04-03]: undo count tests require undolevels=-1 flush after local nvim_buf_set_lines before measuring seq_cur baseline
+- [Phase 04.1-01]: GAP-01: define_groups() added as second line in M.setup() — ensures VM_ groups registered at plugin load (FEAT-07)
+- [Phase 04.1-01]: GAP-02: g_increment loop now uses first/undojoin pattern identical to M.exec — N cursors produce 1 undo entry (FEAT-06, FEAT-10)
+- [Phase 04.1-01]: All multi-cursor feedkeys loops must use first/undojoin pattern for FEAT-06 compliance
 
 ### Pending Todos
 
@@ -125,5 +130,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-01
-Stopped at: Completed 04-03-PLAN.md (M.g_increment + case/replace wrappers; 100 tests passing — Phase 4 complete)
+Stopped at: Completed 04.1-01-PLAN.md (define_groups wired into M.setup, undojoin added to g_increment; 102 tests passing — v1.0 audit gaps closed)
 Resume file: None

@@ -101,7 +101,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 04.1-01-PLAN.md — Wire define_groups() into setup(); add undojoin to g_increment; fix/extend multi-cursor undo specs
+- [x] 04.1-01-PLAN.md — Wire define_groups() into setup(); add undojoin to g_increment; fix/extend multi-cursor undo specs
 
 ### Phase 5: Insert Mode
 **Goal**: Entering insert mode with multiple cursors replicates keystrokes at all cursor positions simultaneously, with clean exit and per-cursor register isolation
@@ -161,7 +161,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 2. Session Lifecycle | 1/1 | Complete | 2026-02-28 |
 | 3. Region and Highlight | 2/2 | Complete   | 2026-02-28 |
 | 4. Normal-Mode Operations | 3/3 | Complete   | 2026-03-01 |
-| 4.1. Gap Closure — Highlight Init and g_increment Undo Wiring | 0/1 | Not started | - |
+| 4.1. Gap Closure — Highlight Init and g_increment Undo Wiring | 1/1 | Complete | 2026-03-01 |
 | 5. Insert Mode | 0/TBD | Not started | - |
 | 6. Search, Entry Points, and Advanced Commands | 0/TBD | Not started | - |
 | 7. Configuration Surface and Plugin API | 0/TBD | Not started | - |
