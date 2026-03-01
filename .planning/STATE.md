@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-02-28T23:58:57Z"
+last_updated: "2026-03-01T00:11:39.147Z"
 progress:
-  total_phases: 8
+  total_phases: 4
   completed_phases: 3
-  total_plans: 8
-  completed_plans: 8
+  total_plans: 10
+  completed_plans: 9
 ---
 
 # Project State
@@ -23,11 +23,11 @@ See: .planning/PROJECT.md (updated 2026-02-28)
 ## Current Position
 
 Phase: 4 of 8 (Normal-mode Operations)
-Plan: 1 of 3 in current phase (complete)
-Status: Phase 4 plan 1 complete
-Last activity: 2026-02-28 — Completed 04-01 (session.lua Phase 4 options, edit.lua skeleton, edit_spec.lua scaffold, 82 tests)
+Plan: 2 of 3 in current phase (complete)
+Status: Phase 4 plan 2 complete
+Last activity: 2026-03-01 — Completed 04-02 (M.exec/yank/paste/dot/change in edit.lua, 89 tests passing)
 
-Progress: [███░░░░░░░] 31%
+Progress: [████░░░░░░] 38%
 
 ## Performance Metrics
 
@@ -43,7 +43,7 @@ Progress: [███░░░░░░░] 31%
 | 01-foundation | 4 | 10 min | 2.5 min |
 | 02-session-lifecycle | 1 | 2 min | 2 min |
 | 03-region-and-highlight | 2 | 11 min | 5.5 min |
-| 04-normal-mode-operations | 1 | 2 min | 2 min |
+| 04-normal-mode-operations | 2 | 9 min | 4.5 min |
 
 **Recent Trend:**
 - Last 5 plans: 02-01 (2 min), 03-01 (3 min), 03-02 (8 min), 04-01 (2 min)
@@ -56,6 +56,7 @@ Progress: [███░░░░░░░] 31%
 | Phase 03-region-and-highlight P01 | 3 | 2 tasks | 4 files |
 | Phase 03-region-and-highlight P02 | 8 | 2 tasks | 4 files |
 | Phase 04-normal-mode-operations P01 | 2 | 2 tasks | 3 files |
+| Phase 04-normal-mode-operations P02 | 7 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -102,6 +103,9 @@ Recent decisions affecting current work:
 - [04-01]: concealcursor set to empty string — disables concealment at cursor position in concealed-syntax buffers
 - [04-01]: edit.lua dot() is the only non-stub export — delegates to exec(), making the forward reference safe
 - [04-01]: Behavior tests in edit_spec.lua are intentionally failing stubs — they document Plan 02 contracts, not Plan 01 output
+- [Phase 04-02]: undojoin between cursor iterations is what achieves single-undo-entry grouping for feedkeys-based edits
+- [Phase 04-02]: file-backed buffers via tempname+vim.cmd('edit') required for undo tracking in tests; buftype=nofile sets undolevels=-123456
+- [Phase 04-02]: M.change exported as _exec_change alias delegating to M.exec with black-hole register for Phase 6 keymap wiring
 
 ### Pending Todos
 
@@ -115,6 +119,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-28
-Stopped at: Completed 04-01-PLAN.md (session.lua Phase 4 options, edit.lua skeleton with 5 exports, edit_spec.lua scaffold, 82 total tests — Phase 4 plan 1 complete)
+Last session: 2026-03-01
+Stopped at: Completed 04-02-PLAN.md (M.exec/yank/paste/dot/change in edit.lua; 89 tests passing — Phase 4 plan 2 complete)
 Resume file: None
