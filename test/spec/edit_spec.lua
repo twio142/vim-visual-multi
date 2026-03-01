@@ -298,6 +298,28 @@ T['g_increment creates exactly one undo entry'] = function()
   MiniTest.expect.equality(after - before, 1)
 end
 
+T['g_increment multi-cursor produces exactly one undo entry (GAP-02 regression)'] = function()
+  -- Regression guard for audit GAP-02: without undojoin, 3 cursors create 3 undo entries.
+  -- This test would have caught the bug had it existed before the audit.
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, { '5', '10', '15' })
+  -- Flush the buf_set_lines into a clean undo baseline
+  local ul = vim.bo[buf].undolevels
+  vim.bo[buf].undolevels = -1
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, { '5', '10', '15' })
+  vim.bo[buf].undolevels = ul
+  -- Set up a 3-cursor session (3 separate lines)
+  local s = session_mod.start(buf, false)
+  s.cursors[1] = region_mod.new(buf, 0, 0)
+  s.cursors[2] = region_mod.new(buf, 1, 0)
+  s.cursors[3] = region_mod.new(buf, 2, 0)
+  s.primary_idx = 3
+  local before = vim.fn.undotree().seq_cur
+  edit.g_increment(s, 1)
+  local after = vim.fn.undotree().seq_cur
+  -- Must be exactly 1 new undo entry for all 3 cursor operations combined
+  MiniTest.expect.equality(after - before, 1)
+end
+
 T['g_increment is a no-op on non-number line (silent skip)'] = function()
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, { 'hello', '42' })
   local s = session_mod.start(buf, false)

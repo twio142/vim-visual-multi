@@ -45,7 +45,19 @@ T_hl['define_groups does not error'] = function()
   end)
 end
 
--- 3. draw_cursor returns an integer mark_id on first call; subsequent call with same id succeeds
+-- 3. setup() registers VM_ groups so they resolve at runtime (GAP-01 regression guard)
+T_hl['setup() defines VM_ highlight groups'] = function()
+  require('visual-multi').setup()
+  -- nvim_get_hl returns {} for unknown groups and a non-empty table for defined groups.
+  local cursor_hl = vim.api.nvim_get_hl(0, { name = 'VM_Cursor' })
+  assert(next(cursor_hl) ~= nil,
+    'Expected VM_Cursor to be defined after setup(); got empty table')
+  local extend_hl = vim.api.nvim_get_hl(0, { name = 'VM_Extend' })
+  assert(next(extend_hl) ~= nil,
+    'Expected VM_Extend to be defined after setup(); got empty table')
+end
+
+-- 4. draw_cursor returns an integer mark_id on first call; subsequent call with same id succeeds
 T_hl['draw_cursor returns integer mark_id'] = function()
   local hl = require('visual-multi.highlight')
   local id = hl.draw_cursor(buf, 0, 0, nil)
