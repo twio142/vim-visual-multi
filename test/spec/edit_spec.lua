@@ -251,4 +251,160 @@ T['change deletes word without entering insert mode'] = function()
   MiniTest.expect.equality(vim.api.nvim_get_mode().mode, 'n')
 end
 
+-- ─── Category G: g_increment sequential numbers (FEAT-10) ─────────────────────
+
+T['g_increment applies +1,+2,+3 top-to-bottom on numbers'] = function()
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, { '10', '20', '30' })
+  local s = session_mod.start(buf, false)
+  s.cursors[1] = region_mod.new(buf, 0, 0)
+  s.cursors[2] = region_mod.new(buf, 1, 0)
+  s.cursors[3] = region_mod.new(buf, 2, 0)
+  s.primary_idx = 3
+  edit.g_increment(s, 1)  -- direction=1 → g<C-a>
+  local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+  MiniTest.expect.equality(lines[1], '11')   -- 10 + 1
+  MiniTest.expect.equality(lines[2], '22')   -- 20 + 2
+  MiniTest.expect.equality(lines[3], '33')   -- 30 + 3
+end
+
+T['g_increment applies -1,-2,-3 top-to-bottom on numbers'] = function()
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, { '10', '20', '30' })
+  local s = session_mod.start(buf, false)
+  s.cursors[1] = region_mod.new(buf, 0, 0)
+  s.cursors[2] = region_mod.new(buf, 1, 0)
+  s.cursors[3] = region_mod.new(buf, 2, 0)
+  s.primary_idx = 3
+  edit.g_increment(s, -1)  -- direction=-1 → g<C-x>
+  local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+  MiniTest.expect.equality(lines[1], '9')    -- 10 - 1
+  MiniTest.expect.equality(lines[2], '18')   -- 20 - 2
+  MiniTest.expect.equality(lines[3], '27')   -- 30 - 3
+end
+
+T['g_increment creates exactly one undo entry'] = function()
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, { '1', '2', '3' })
+  -- Flush the buf_set_lines above into a clean undo baseline (same pattern as pre_case)
+  local ul = vim.bo[buf].undolevels
+  vim.bo[buf].undolevels = -1
+  vim.bo[buf].undolevels = ul
+  local s = session_mod.start(buf, false)
+  s.cursors[1] = region_mod.new(buf, 0, 0)
+  s.cursors[2] = region_mod.new(buf, 1, 0)
+  s.cursors[3] = region_mod.new(buf, 2, 0)
+  s.primary_idx = 3
+  local before = vim.fn.undotree().seq_cur
+  edit.g_increment(s, 1)
+  local after = vim.fn.undotree().seq_cur
+  MiniTest.expect.equality(after - before, 1)
+end
+
+T['g_increment is a no-op on non-number line (silent skip)'] = function()
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, { 'hello', '42' })
+  local s = session_mod.start(buf, false)
+  s.cursors[1] = region_mod.new(buf, 0, 0)   -- 'hello' — no number
+  s.cursors[2] = region_mod.new(buf, 1, 0)   -- '42' — has number
+  s.primary_idx = 2
+  -- Should not error; line 1 silently skips
+  edit.g_increment(s, 1)
+  local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+  MiniTest.expect.equality(lines[1], 'hello')  -- unchanged
+  MiniTest.expect.equality(lines[2], '44')     -- 42 + 2 (second cursor gets step=2)
+end
+
+T['plain C-a / C-x via exec increments/decrements without sequential steps'] = function()
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, { '5', '10' })
+  local s = session_mod.start(buf, false)
+  s.cursors[1] = region_mod.new(buf, 0, 0)
+  s.cursors[2] = region_mod.new(buf, 1, 0)
+  s.primary_idx = 2
+  edit.exec(s, '<C-a>')
+  local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+  MiniTest.expect.equality(lines[1], '6')   -- 5 + 1
+  MiniTest.expect.equality(lines[2], '11')  -- 10 + 1
+end
+
+-- ─── Category K: case conversion (FEAT-10) ────────────────────────────────────
+
+T['case_toggle flips case at each cursor'] = function()
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, { 'abc', 'DEF' })
+  local s = session_mod.start(buf, false)
+  s.cursors[1] = region_mod.new(buf, 0, 0)
+  s.cursors[2] = region_mod.new(buf, 1, 0)
+  s.primary_idx = 2
+  edit.case_toggle(s)
+  local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+  MiniTest.expect.equality(lines[1]:sub(1,1), 'A')  -- 'a' → 'A'
+  MiniTest.expect.equality(lines[2]:sub(1,1), 'd')  -- 'D' → 'd'
+end
+
+T['case_upper converts word under cursor to uppercase'] = function()
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, { 'hello', 'world' })
+  local s = session_mod.start(buf, false)
+  s.cursors[1] = region_mod.new(buf, 0, 0)
+  s.cursors[2] = region_mod.new(buf, 1, 0)
+  s.primary_idx = 2
+  edit.case_upper(s, 'iw')
+  local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+  MiniTest.expect.equality(lines[1], 'HELLO')
+  MiniTest.expect.equality(lines[2], 'WORLD')
+end
+
+T['case_lower converts word under cursor to lowercase'] = function()
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, { 'HELLO', 'WORLD' })
+  local s = session_mod.start(buf, false)
+  s.cursors[1] = region_mod.new(buf, 0, 0)
+  s.cursors[2] = region_mod.new(buf, 1, 0)
+  s.primary_idx = 2
+  edit.case_lower(s, 'iw')
+  local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+  MiniTest.expect.equality(lines[1], 'hello')
+  MiniTest.expect.equality(lines[2], 'world')
+end
+
+T['case_upper creates exactly one undo entry'] = function()
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, { 'aa', 'bb' })
+  -- Flush the buf_set_lines above into a clean undo baseline
+  local ul = vim.bo[buf].undolevels
+  vim.bo[buf].undolevels = -1
+  vim.bo[buf].undolevels = ul
+  local s = session_mod.start(buf, false)
+  s.cursors[1] = region_mod.new(buf, 0, 0)
+  s.cursors[2] = region_mod.new(buf, 1, 0)
+  s.primary_idx = 2
+  local before = vim.fn.undotree().seq_cur
+  edit.case_upper(s, 'iw')
+  local after = vim.fn.undotree().seq_cur
+  MiniTest.expect.equality(after - before, 1)
+end
+
+-- ─── Category R: replace-char (FEAT-10) ───────────────────────────────────────
+
+T['replace_char replaces character under each cursor'] = function()
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, { 'abc', 'def' })
+  local s = session_mod.start(buf, false)
+  s.cursors[1] = region_mod.new(buf, 0, 0)
+  s.cursors[2] = region_mod.new(buf, 1, 0)
+  s.primary_idx = 2
+  edit.replace_char(s, 'X')
+  local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+  MiniTest.expect.equality(lines[1]:sub(1,1), 'X')  -- 'a' replaced by 'X'
+  MiniTest.expect.equality(lines[2]:sub(1,1), 'X')  -- 'd' replaced by 'X'
+end
+
+T['replace_char creates exactly one undo entry'] = function()
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, { 'aa', 'bb' })
+  -- Flush the buf_set_lines above into a clean undo baseline
+  local ul = vim.bo[buf].undolevels
+  vim.bo[buf].undolevels = -1
+  vim.bo[buf].undolevels = ul
+  local s = session_mod.start(buf, false)
+  s.cursors[1] = region_mod.new(buf, 0, 0)
+  s.cursors[2] = region_mod.new(buf, 1, 0)
+  s.primary_idx = 2
+  local before = vim.fn.undotree().seq_cur
+  edit.replace_char(s, 'Z')
+  local after = vim.fn.undotree().seq_cur
+  MiniTest.expect.equality(after - before, 1)
+end
+
 return T
