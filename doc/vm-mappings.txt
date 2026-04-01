@@ -77,6 +77,7 @@ Add Cursor Up         <C-Up>      ,,       ,,      ,,
 Select All            \\A         select all occurrences of a word
 Start Regex Search    \\/         create a selection with regex search
 Add Cursor At Pos     \\\         add a single cursor at current position
+Add Cursor By Motion  (unbound)   add cursors at current pos and end of motion
 Reselect Last         \\gS        reselect set of regions of last VM session
 
 Mouse Cursor    <C-LeftMouse>     create a cursor where clicked

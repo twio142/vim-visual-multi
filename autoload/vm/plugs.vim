@@ -7,6 +7,7 @@ fun! vm#plugs#permanent() abort
   xmap <expr><silent>     <Plug>(VM-Visual-Find)             vm#operators#find(1, 1)
 
   nnoremap <silent>       <Plug>(VM-Add-Cursor-At-Pos)       :call vm#commands#add_cursor_at_pos(0)<cr>
+  nnoremap <silent>       <Plug>(VM-Add-Cursor-By-Motion)    :<C-u>call vm#commands#add_cursor_by_motion()<cr>
   nnoremap <silent>       <Plug>(VM-Add-Cursor-At-Word)      :call vm#commands#add_cursor_at_word(1, 1)<cr>
   nnoremap <silent>       <Plug>(VM-Add-Cursor-Down)         :<C-u>call vm#commands#add_cursor_down(0, v:count1)<cr>
   nnoremap <silent>       <Plug>(VM-Add-Cursor-Up)           :<C-u>call vm#commands#add_cursor_up(0, v:count1)<cr>

@@ -13,6 +13,7 @@
 let s:base = {
       \"Reselect Last":           ['', 'n'],
       \"Add Cursor At Pos":       ['', 'n'],
+      \"Add Cursor By Motion":    ['', 'n'],
       \"Add Cursor At Word":      ['', 'n'],
       \"Start Regex Search":      ['', 'n'],
       \"Select All":              ['', 'n'],

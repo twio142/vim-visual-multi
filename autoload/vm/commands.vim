@@ -131,6 +131,46 @@ fun! vm#commands#add_cursor_up(extend, count) abort
 endfun
 
 
+fun! vm#commands#add_cursor_by_motion() abort
+    " Entry point for motion-based cursor placement.
+    " Captures the first key of the motion to detect exclusive motions (w/W),
+    " then feeds g@{key} to enter operator-pending mode for the rest.
+    let s:cursor_motion_pos = getpos('.')
+    let ch = nr2char(getchar())
+    let s:cursor_motion_excl = ch =~# '^[wW]$'
+    let &operatorfunc = 'vm#commands#_cursor_motion_cb'
+    call feedkeys('g@' . ch, '')
+endfun
+
+
+fun! vm#commands#_cursor_motion_cb(type) abort
+    " Operatorfunc callback. Initializes VM and adds cursors at both ends of motion.
+    call s:init(0, 1, 0)
+    let start   = getpos("'[")
+    let end_pos = getpos("']")
+    let orig    = s:cursor_motion_pos
+
+    call s:G.new_cursor()
+
+    if a:type ==# 'line'
+        " Linewise: use '] line with original column (works for both directions).
+        call cursor(end_pos[1], orig[2])
+    elseif start[1] == orig[1] && start[2] == orig[2]
+        " Forward charwise: '[ is the original position, second cursor goes to '].
+        " w/W are exclusive so '] is one char short of the actual destination.
+        let col = s:cursor_motion_excl ? end_pos[2] + 1 : end_pos[2]
+        call cursor(end_pos[1], col)
+    else
+        " Backward charwise: '[ is the destination, second cursor goes to the
+        " exact saved original position (avoids off-by-one for exclusive motions
+        " like b, h, F, T where '] falls one char before the original).
+        call cursor(orig[1], orig[2])
+    endif
+
+    call s:G.new_cursor()
+endfun
+
+
 fun! vm#commands#add_cursor_at_word(yank, search) abort
     " Add a pattern for current word, place cursor at word begin.
     call s:init(0, 1, 0)
