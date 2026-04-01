@@ -7,3 +7,6 @@ generated_output_file.txt
 test.log
 __pycache__
 test/.python-version
+.claude
+.specify/templates
+.specify/scripts
