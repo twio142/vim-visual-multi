@@ -108,6 +108,12 @@ fun! s:Global.change_mode(...) abort
     else      | call self.backup_last_regions()
     endif
 
+    let from_extend = s:X()
+    if a:0 && from_extend
+        let heads = []
+        for r in s:R() | call add(heads, [r.cur_ln(), r.cur_col()]) | endfor
+    endif
+
     let g:Vm.extend_mode = !s:X()
 
     let ix = s:v.index
@@ -116,6 +122,11 @@ fun! s:Global.change_mode(...) abort
         call self.update_regions()
     else
         call self.collapse_regions()
+        if a:0 && from_extend
+            let i = 0
+            for r in s:R() | call r.update_cursor(heads[i]) | let i += 1 | endfor
+            call self.update_highlight()
+        endif
     endif
 
     let R = self.select_region(ix)
