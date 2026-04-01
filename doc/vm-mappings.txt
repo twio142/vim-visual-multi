@@ -169,11 +169,9 @@ One Per Line          \\L         keep at most one region per line
 Numbers               \\n         see |vm-numbering|
 Numbers Append        \\N         ,,
 
-Run Normal            \\z         Run Normal
-Run Visual            \\v         Run Visual
+Run                   \\z         Run (normal/visual based on mode)
 Run Ex                \\x         Run Ex
-Run Last Normal       \\Z         Run Last Normal
-Run Last Visual       \\V         Run Last Visual
+Run Last              \\Z         Run Last
 Run Last Ex           \\X         Run Last Ex
 Run Macro             \\@         Run Macro
 

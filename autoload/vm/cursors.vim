@@ -195,7 +195,7 @@ fun! s:change_at_cursors(M, reg, n) abort
   if Cmd[:1] ==? 'cs' | return s:V.Edit.run_normal(Cmd) | endif
 
   "cr coerce (vim-abolish)
-  if Cmd[:1] ==? 'cr' | return feedkeys("\<Plug>(VM-Run-Normal)".Cmd."\<cr>") | endif
+  if Cmd[:1] ==? 'cr' | return feedkeys("\<Plug>(VM-Run)".Cmd."\<cr>") | endif
 
   let [Obj, N] = s:parse_cmd(Cmd, '"'.a:reg, a:n, 'c')
 

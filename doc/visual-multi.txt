@@ -524,13 +524,13 @@ With the dot command you can repeat:
 - the last edit done outside of VM (also edits done in |replace-mode|)
 - operations at cursors (`daw`, `ciw`, etc)
 - the last VM normal command (`x`, `X`, `~`, etc)
-- the last VM normal command as entered with `\\z`
+- the last VM command as entered with `\\z`
 
 Quick reference ~
 
 Dot        .       run |single-repeat|                          *vm-run-dot*
-Normal     \\z     run |:normal| (recursive)                    *vm-run-normal*
-Visual     \\v     |extend-mode| only                           *vm-run-visual*
+Run        \\z     run |:normal| or |:visual| based on mode       *vm-run*
+Run Last   \\Z     repeat last run command                    *vm-run-last*
 Ex         \\x     run any ex command at cursors              *vm-run-ex*
 Macro      \\@     run a macro at cursors                     *vm-run-macro*
 

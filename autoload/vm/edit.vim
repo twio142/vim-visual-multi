@@ -103,10 +103,7 @@ fun! s:Edit.run_visual(cmd, recursive, ...) abort
     " Run visual command over selections.
     "-----------------------------------------------------------------------
 
-    if !s:X()
-        return s:F.msg('Not possible in cursor mode.')
-
-    elseif !a:0 && a:cmd == -1
+    if !a:0 && a:cmd == -1
         call s:F.special_statusline('VISUAL')
         let bang = !a:recursive ? '!' : ''
         let cmd = input(':visual'.bang.' ')
@@ -137,6 +134,28 @@ fun! s:Edit.run_visual(cmd, recursive, ...) abort
 
     if !empty(errors)
         call s:F.msg('[visual-multi] errors while executing '.cmd)
+    endif
+endfun
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:Edit.run(cmd, ...) abort
+    " Dispatch to run_normal or run_visual based on current mode.
+    if s:X()
+        call self.run_visual(a:cmd, 1)
+    else
+        call self.run_normal(a:cmd, a:0 ? a:1 : {})
+    endif
+endfun
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+fun! s:Edit.run_last() abort
+    " Repeat last run command based on current mode.
+    if s:X()
+        call self.run_visual(g:Vm.last_visual[0], g:Vm.last_visual[1])
+    else
+        call self.run_normal(g:Vm.last_normal[0], {'count': v:count1, 'recursive': g:Vm.last_normal[1]})
     endif
 endfun
 
