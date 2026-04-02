@@ -110,7 +110,7 @@ endfun
 
 fun! s:vchar() abort
     "characterwise selection
-    silent keepjumps normal! `<y`>`]
+    silent keepjumps normal! gvy`]
     call s:G.check_mutliline(0, s:G.new_region())
 endfun
 
