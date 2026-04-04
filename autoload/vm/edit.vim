@@ -130,7 +130,7 @@ fun! s:Edit.run_visual(cmd, recursive, ...) abort
 
     let g:Vm.last_visual = [cmd, a:recursive]
     call self.after_commands(0)
-    if !s:visual_reselect(cmd) | call s:G.change_mode() | endif
+    if s:X() && !get(s:, 'stay_in_extend', 0) | call s:G.change_mode() | endif
 
     if !empty(errors)
         call s:F.msg('[visual-multi] errors while executing '.cmd)
@@ -389,6 +389,8 @@ fun! s:Edit.process_visual(cmd, recursive) abort
     let change  = 0             " each cursor will update this value
     let size    = s:F.size()    " initial buffer size
     let s:v.storepos = getpos('.')[1:2]
+    
+    let s:stay_in_extend = 0
 
     let cmd = a:recursive ? 'normal '.a:cmd : 'normal! '.a:cmd
 
@@ -399,6 +401,14 @@ fun! s:Edit.process_visual(cmd, recursive) abort
         call cursor(r.L, r.b) | normal! m`
         call cursor(r.l, r.a) | normal! v``
         exe cmd
+
+        if mode(1) =~? 'v'
+            let s:stay_in_extend = 1
+            exe "normal! \<esc>"
+            let [r.l, r.a] = getpos("'<")[1:2]
+            let [r.L, r.b] = getpos("'>")[1:2]
+            call r.update_region()
+        endif
 
         "update changed size
         let change = s:F.size() - size
@@ -516,13 +526,6 @@ fun! s:bs_del(cmd) abort
     endif
 
     call s:G.merge_regions()
-endfun
-
-
-fun! s:visual_reselect(cmd) abort
-    " Ensure selections are reselected after some commands.
-    let reselect = a:cmd == '~' || a:cmd =~? 'u'
-    return s:X() && reselect
 endfun
 
 " vim: et sw=4 ts=4 sts=4 fdm=indent fdn=1
