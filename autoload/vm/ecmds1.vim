@@ -118,7 +118,10 @@ fun! s:Edit.xdelete(key, cnt) abort
     if s:X()
         call self.delete(1, s:v.use_register, a:cnt, 1)
     else
-        call self.run_normal(a:key, {'count': a:cnt, 'recursive': 0})
+        " 'store' makes process() back up the deleted text and fill the
+        " registers, as a deletion at cursors would do
+        call self.run_normal(a:key, {'count': a:cnt, 'recursive': 0,
+                    \               'store': s:v.use_register})
     endif
 endfun "}}}
 

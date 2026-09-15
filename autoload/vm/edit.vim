@@ -79,7 +79,7 @@ fun! s:Edit.run_normal(cmd, ...) abort
     let errors = ''
 
     try
-        if a:cmd ==? 'x'   | call s:bs_del(n . a:cmd)
+        if a:cmd ==? 'x'   | call s:bs_del(n . a:cmd, args)
         elseif args.gcount | call self.process(a:cmd, args)
         else               | call self.process(c, args)
         endif
@@ -509,10 +509,17 @@ endfun
 " Helpers
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-fun! s:bs_del(cmd) abort
+fun! s:bs_del(cmd, ...) abort
     " Special handler for x/X normal commands, and <BS>/<Del> insert commands.
+    " Optional a:1 is the options dictionary from run_normal(), it must be
+    " forwarded to process(), or a 'store' option would be lost and the deleted
+    " text wouldn't be yanked.
     if s:v.insert
         return vm#icmds#x(a:cmd)
+    elseif a:0
+        " it's a deletion, so the VM '-' register must be filled too
+        if get(a:1, 'store', '_') != '_' | let s:v.deleting = 1 | endif
+        call s:V.Edit.process('normal! '.a:cmd, a:1)
     else
         call s:V.Edit.process('normal! '.a:cmd)
     endif
